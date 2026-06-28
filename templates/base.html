@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HackForge</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+     <nav>
+
+        <a href="/" class="logo">
+         HackForge
+        </a>
+
+        <div class="nav-links">
+
+            {% if current_user.is_authenticated %}
+
+               <a href="/">Home</a>
+
+               <a href="/dashboard">
+                Dashboard
+               </a>
+
+               <a href="/hackathons">
+                  Hackathons
+               </a>
+
+               {% if current_user.role == "organizer" %}
+                  <a href="/create-hackathon">
+                     Create Hackathon
+                  </a>
+               {% endif %}
+
+               <a href="/logout">
+                Logout
+               </a>
+
+            {% else %}
+
+               <a href="/">
+                Home
+               </a>
+
+               <a href="/hackathons">
+                  Hackathons
+               </a>
+
+               <a href="login">
+                Login
+               </a>
+
+               <a href="/register">
+                Register
+               </a>
+
+            {% endif %}
+
+        </div>
+        
+     </nav>
+
+     {% with messages = get_flashed_messages() %}
+        {% if messages %}
+
+           {% for message in messages %}
+
+              <div class="flash-message">
+               {{ message }}
+              </div>
+
+            {% endfor %}
+
+         {% endif %}
+      {% endwith %}
+
+     <div class="container">
+        {% block content %}
+        {% endblock %}
+     </div>
+
+     <script>
+
+      setTimeout(() => {
+
+         const flashes =
+            document.querySelectorAll(".flash-message");
+         flashes.forEach(flash => {
+
+            flash.style.opacity = "0";
+
+            setTimeout(() => {
+
+               flash.remove();
+
+            }, 500);
+
+         });
+            
+      }, 4000);
+
+     </script>
+      
+</body>
+</html>

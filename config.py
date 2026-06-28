@@ -3,4 +3,4 @@ class Config:
 
     SQLALCHEMY_DATABASE_URI = "sqlite:///hackforge.db"
 
-    SQLALCHEMY_TRACK_MODICATIONS = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>
+    Welcome Back, {{ user.username }}
+</h1>
+
+<p>
+    Manage your hackatons, teams, and projects from one place.
+</p>
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <h2>{{ hackathons|length }}</h2>
+        <p>Hackathons</p>
+    </div>
+
+    <div class="stat-card">
+        <h2>0</h2>
+        <p>Teams</p>
+    </div>
+
+    <div class="stat-card">
+        <h2>0</h2>
+        <p>Projects</p>
+    </div>
+
+</div>
+
+<div class="card">
+
+    <h2>
+        Quick Actions
+    </h2>
+
+    <br>
+
+    <a href="/create-hackathon" class="btn-primary">
+        Create Hackathon
+    </a>
+    
+</div>
+
+<br>
+
+<div class="card">
+
+    <h2>Your Hackathons</h2>
+
+    <br>
+
+    {% for hackathon in hackathons %}
+
+       <div class="hackathon-item">
+
+        <h3>{{ hackathon.title }}</h3>
+
+        <p>{{ hackathon.description }}</p>
+
+        <br>
+
+        <small>
+            {{ hackathon.start_date }}
+            -
+            {{ hackathon.end_date }}
+        </small>
+
+
+       </div>
+
+    {% else %}
+
+       <p>
+        You haven't created any hackathon yet.
+       </p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}
+
+

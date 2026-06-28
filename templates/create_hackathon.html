@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="auth-box">
+
+    <div class="card">
+
+        <h1>Create Hackathon</h1>
+
+        <form method="POST">
+
+            <input   
+                 type="text"
+                 name="title"
+                 placeholder="Hackathon Title"
+                 required
+            >
+
+            <textarea    
+                name="description"
+                placeholder="Description"
+                required
+            ></textarea>
+
+            <input
+                type="date"
+                name="start_date"
+                required
+            >
+
+            <input
+                 type="date"
+                 name="end_date"
+                 required
+            >
+
+            <button type="submit">
+                Create Hackathon
+            </button>
+
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="auth-box">
+
+    <div class="card">
+
+        <h1>Create {{ role.title() }}Account</h1>
+
+        <form method="POST">
+
+            <input
+                 type="text"
+                 name="username"
+                 placeholder="Username"
+                 required
+            >
+            
+            <input
+                 type="email"
+                 name="email"
+                 placeholder="Email"
+                 required
+            >
+
+            <input
+                 type="password"
+                 name="password"
+                 placeholder="Password"
+                 required
+            >
+
+            <input
+                 type="hidden"
+                 name="role"
+                 value="{{ role }}"
+            >
+
+            <button type="submit">
+                Register
+            </button>
+
+            <p style="margin-top:20px; text-align:center;">
+                Already have an account?
+                <a href="/login">Login</a>
+            </p>
+
+        </form>
+
+    </div>
+    
+</div>
+
+{% endblock %}
