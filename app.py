@@ -1,6 +1,7 @@
 from flask import Flask
 from config import Config
 from models import db, User, Hackathon
+from flask_migrate import Migrate
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -10,14 +11,11 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 db.init_app(app)
+migrate = Migrate(app, db)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
 login_manager.login_view = "login"
-
-with app.app_context():
-    db.create_all()
-
 
 @app.route("/")   
 def home():
