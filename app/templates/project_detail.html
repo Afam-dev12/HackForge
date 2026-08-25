@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}{{ submission.title }} - HackForge{% endblock %}
+
+{% block content %}
+<div class="detail-page">
+    <div class="detail-header">
+        <div>
+            <h1>{{ submission.title }}</h1>
+            <div class="detail-meta">
+                <span>&#127942; {{ submission.hackathon.title }}</span>
+                <span>by <a href="/profile/{{ submission.author.id }}">{{ submission.author.username }}</a></span>
+                {% if submission.team %}
+                    <span>Team: {{ submission.team.name }}</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="detail-body">
+        <div class="detail-main">
+            <div class="card">
+                <h2>Description</h2>
+                <p class="description-text">{{ submission.description }}</p>
+            </div>
+
+            {% if submission.problem %}
+                <div class="card">
+                    <h2>Problem</h2>
+                    <p>{{ submission.problem }}</p>
+                </div>
+            {% endif %}
+
+            {% if submission.solution %}
+                <div class="card">
+                    <h2>Solution</h2>
+                    <p>{{ submission.solution }}</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="detail-sidebar">
+            <div class="card">
+                <h3>Project Links</h3>
+                <div class="info-list">
+                    {% if submission.github_url %}
+                        <div class="info-item">
+                            <strong>GitHub</strong>
+                            <a href="{{ submission.github_url }}" target="_blank">View Code</a>
+                        </div>
+                    {% endif %}
+                    {% if submission.demo_url %}
+                        <div class="info-item">
+                            <strong>Demo</strong>
+                            <a href="{{ submission.demo_url }}" target="_blank">Live Demo</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if submission.technologies_list %}
+                <div class="card">
+                    <h3>Technologies</h3>
+                    <div class="tech-tags">
+                        {% for tech in submission.technologies_list %}
+                            <span class="tech-tag">{{ tech }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if submission.scores %}
+                <div class="card">
+                    <h3>Judging</h3>
+                    <p>Average Score: <strong>{{ submission.average_score }}</strong></p>
+                    <p>Total Score: <strong>{{ submission.total_score }}</strong></p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

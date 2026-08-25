@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}{{ opportunity.title }} - HackForge{% endblock %}
+
+{% block content %}
+<div class="detail-page">
+    <div class="detail-header">
+        <div>
+            <h1>{{ opportunity.title }}</h1>
+            <div class="detail-meta">
+                <span class="category-tag">{{ opportunity.category }}</span>
+                {% if opportunity.organization %}<span>{{ opportunity.organization }}</span>{% endif %}
+                <span>&#128205; {{ opportunity.location }}</span>
+                {% if opportunity.deadline %}<span>&#128197; Deadline: {{ opportunity.deadline }}</span>{% endif %}
+            </div>
+        </div>
+        {% if current_user.is_authenticated %}
+            <form method="POST" action="/opportunities/{{ opportunity.id }}/save" style="display:inline">
+                <button type="submit" class="{% if is_saved %}btn-secondary{% else %}btn-primary{% endif %}">
+                    {% if is_saved %}Unsave{% else %}Save{% endif %}
+                </button>
+            </form>
+        {% endif %}
+    </div>
+
+    <div class="detail-body">
+        <div class="detail-main">
+            <div class="card">
+                <h2>Description</h2>
+                <p class="description-text">{{ opportunity.description }}</p>
+            </div>
+
+            {% if opportunity.eligibility %}
+                <div class="card">
+                    <h2>Eligibility</h2>
+                    <p>{{ opportunity.eligibility }}</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="detail-sidebar">
+            <div class="card">
+                <h3>Details</h3>
+                <div class="info-list">
+                    {% if opportunity.url %}
+                        <div class="info-item">
+                            <strong>Link</strong>
+                            <a href="{{ opportunity.url }}" target="_blank">Apply / Learn More</a>
+                        </div>
+                    {% endif %}
+                    <div class="info-item">
+                        <strong>Category</strong>
+                        <span>{{ opportunity.category }}</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Location</strong>
+                        <span>{{ opportunity.location }}</span>
+                    </div>
+                    {% if opportunity.deadline %}
+                        <div class="info-item">
+                            <strong>Deadline</strong>
+                            <span>{{ opportunity.deadline }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Teams - HackForge{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{% if hackathon %}Teams for {{ hackathon.title }}{% else %}My Teams{% endif %}</h1>
+    <a href="/teams/create{% if hackathon %}?hackathon_id={{ hackathon.id }}{% endif %}" class="btn-primary">Create Team</a>
+</div>
+
+{% if teams %}
+    <div class="teams-grid">
+        {% for team in teams %}
+            <a href="/teams/{{ team.id }}" class="team-card">
+                <h3>{{ team.name }}</h3>
+                <p>{{ team.description[:100] }}{% if team.description|length > 100 %}...{% endif %}</p>
+                <div class="team-meta">
+                    <span>{{ team.member_count }} members</span>
+                    <span>&#128205; {{ team.hackathon.title }}</span>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state card">
+        <h3>No teams found</h3>
+        <p>Create a team to get started!</p>
+    </div>
+{% endif %}
+{% endblock %}

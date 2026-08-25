@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Participants - {{ hackathon.title }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <a href="/hackathons/{{ hackathon.id }}" class="back-link">&larr; Back to {{ hackathon.title }}</a>
+    <h1>Participants ({{ participants|length }})</h1>
+</div>
+
+{% if participants %}
+    <div class="builders-grid">
+        {% for user in participants %}
+            <a href="/profile/{{ user.id }}" class="builder-card">
+                <div class="builder-avatar">{{ user.username[0].upper() }}</div>
+                <h3>{{ user.username }}</h3>
+                <span class="role-badge role-{{ user.role }}">{{ user.role.title() }}</span>
+                {% if user.location %}<p>&#128205; {{ user.location }}</p>{% endif %}
+            </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state card">
+        <h3>No participants yet</h3>
+        <p>Be the first to register!</p>
+    </div>
+{% endif %}
+{% endblock %}

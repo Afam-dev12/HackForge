@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Opportunities - HackForge{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ page_title if page_title else "Opportunity Hub" }}</h1>
+    <p>Discover scholarships, internships, hackathons, and opportunities for young builders.</p>
+</div>
+
+<div class="filter-bar">
+    <form method="GET" class="search-form">
+        <input type="text" name="search" value="{{ search }}" placeholder="Search opportunities...">
+        <select name="category" onchange="this.form.submit()">
+            <option value="">All Categories</option>
+            {% for cat in categories %}
+                <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn-sm">Search</button>
+    </form>
+    {% if current_user.is_authenticated %}
+        <a href="/saved" class="btn-secondary">Saved Opportunities</a>
+    {% endif %}
+</div>
+
+{% if opportunities %}
+    <div class="projects-grid">
+        {% for opp in opportunities %}
+            <a href="/opportunities/{{ opp.id }}" class="project-card">
+                <div class="card-header">
+                    <h3>{{ opp.title }}</h3>
+                    <span class="category-tag">{{ opp.category }}</span>
+                </div>
+                <p>{{ opp.description[:120] }}{% if opp.description|length > 120 %}...{% endif %}</p>
+                <div class="card-meta">
+                    {% if opp.organization %}<span>{{ opp.organization }}</span>{% endif %}
+                    <span>&#128205; {{ opp.location }}</span>
+                    {% if opp.deadline %}<span>&#128197; Deadline: {{ opp.deadline }}</span>{% endif %}
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state card">
+        <h3>No opportunities found</h3>
+        <p>Try a different search or category.</p>
+    </div>
+{% endif %}
+{% endblock %}

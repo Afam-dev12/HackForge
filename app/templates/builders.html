@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Builders - HackForge{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Builder Network</h1>
+    <p>Discover talented builders, developers, and innovators.</p>
+</div>
+
+<div class="filter-bar">
+    <form method="GET" class="search-form">
+        <input type="text" name="search" value="{{ search }}" placeholder="Search builders...">
+        <input type="text" name="skill" value="{{ skill_filter }}" placeholder="Filter by skill">
+        <button type="submit" class="btn-sm">Search</button>
+    </form>
+</div>
+
+{% if users %}
+    <div class="builders-grid">
+        {% for user in users %}
+            <a href="/profile/{{ user.id }}" class="builder-card">
+                <div class="builder-avatar">{{ user.username[0].upper() }}</div>
+                <h3>{{ user.username }}</h3>
+                <span class="role-badge role-{{ user.role }}">{{ user.role.title() }}</span>
+                {% if user.location %}<p>&#128205; {{ user.location }}</p>{% endif %}
+                {% if user.skills_list %}
+                    <div class="tech-tags">
+                        {% for skill in user.skills_list[:3] %}
+                            <span class="tech-tag">{{ skill }}</span>
+                        {% endfor %}
+                        {% if user.skills_list|length > 3 %}
+                            <span class="tech-tag">+{{ user.skills_list|length - 3 }}</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state card">
+        <h3>No builders found</h3>
+        <p>Try a different search.</p>
+    </div>
+{% endif %}
+{% endblock %}

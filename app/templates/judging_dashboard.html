@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Judging - {{ hackathon.title }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <a href="/hackathons/{{ hackathon.id }}" class="back-link">&larr; Back to {{ hackathon.title }}</a>
+    <h1>Judging Dashboard</h1>
+</div>
+
+{% if current_user.id == hackathon.created_by %}
+<div class="card">
+    <h2>Add Judging Criteria</h2>
+    <form method="POST" action="/judging/hackathon/{{ hackathon.id }}/criteria" class="inline-form">
+        <input type="text" name="name" placeholder="Criterion name" required>
+        <input type="text" name="description" placeholder="Description (optional)">
+        <input type="number" name="max_score" value="10" min="1" max="100" style="width:80px">
+        <button type="submit" class="btn-sm">Add</button>
+    </form>
+</div>
+{% endif %}
+
+{% if criteria %}
+    <div class="card">
+        <h2>Criteria</h2>
+        <div class="criteria-list">
+            {% for c in criteria %}
+                <div class="criteria-item">
+                    <strong>{{ c.name }}</strong>
+                    <span>(Max: {{ c.max_score }})</span>
+                    {% if c.description %}<p>{{ c.description }}</p>{% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+{% if submissions %}
+    <div class="card">
+        <h2>Submissions ({{ submissions|length }})</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Team</th>
+                    <th>Author</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sub in submissions %}
+                    <tr>
+                        <td><a href="/projects/{{ sub.id }}">{{ sub.title }}</a></td>
+                        <td>{{ sub.team.name if sub.team else "Individual" }}</td>
+                        <td><a href="/profile/{{ sub.author.id }}">{{ sub.author.username }}</a></td>
+                        <td>
+                            <a href="/judging/submission/{{ sub.id }}" class="btn-sm">Score</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="empty-state card">
+        <h3>No submissions yet</h3>
+    </div>
+{% endif %}
+
+<div class="card" style="margin-top:20px">
+    <a href="/results/hackathon/{{ hackathon.id }}" class="btn-primary">View Results</a>
+</div>
+{% endblock %}

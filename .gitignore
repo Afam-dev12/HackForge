@@ -4,3 +4,6 @@ instance/
 *.pyc
 .env
 .vscode/
+*.db
+.pytest_cache/
+hackforge.db

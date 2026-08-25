@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Hackathons - HackForge{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Hackathons</h1>
+    <p>Discover hackathons to build, compete, and grow.</p>
+</div>
+
+<div class="filter-bar">
+    <form method="GET" class="search-form">
+        <input type="text" name="search" value="{{ search }}" placeholder="Search hackathons...">
+        <select name="status" onchange="this.form.submit()">
+            <option value="">All Status</option>
+            <option value="active" {% if status_filter == 'active' %}selected{% endif %}>Active</option>
+            <option value="draft" {% if status_filter == 'draft' %}selected{% endif %}>Draft</option>
+            <option value="completed" {% if status_filter == 'completed' %}selected{% endif %}>Completed</option>
+        </select>
+        <button type="submit" class="btn-sm">Search</button>
+    </form>
+</div>
+
+{% if hackathons %}
+    <div class="hackathon-grid">
+        {% for hackathon in hackathons %}
+            <a href="/hackathons/{{ hackathon.id }}" class="hackathon-card">
+                <div class="card-header">
+                    <h3>{{ hackathon.title }}</h3>
+                    <span class="status-badge status-{{ hackathon.status }}">{{ hackathon.status_display }}</span>
+                </div>
+                <p>{{ hackathon.description[:150] }}{% if hackathon.description|length > 150 %}...{% endif %}</p>
+                <div class="card-meta">
+                    <span>&#128205; {{ hackathon.location }}</span>
+                    <span>&#128101; {{ hackathon.registration_count }} registered</span>
+                    <span>&#128197; {{ hackathon.start_date }} &mdash; {{ hackathon.end_date }}</span>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state card">
+        <h3>No hackathons found</h3>
+        <p>Check back later or adjust your search.</p>
+    </div>
+{% endif %}
+{% endblock %}

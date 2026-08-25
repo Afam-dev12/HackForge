@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Score: {{ submission.title }} - HackForge{% endblock %}
+
+{% block content %}
+<div class="detail-page">
+    <a href="/judging/hackathon/{{ hackathon.id }}" class="back-link">&larr; Back to Judging</a>
+
+    <div class="card" style="margin-top:20px">
+        <h1>{{ submission.title }}</h1>
+        <p>{{ submission.description }}</p>
+        {% if submission.team %}
+            <p><strong>Team:</strong> {{ submission.team.name }}</p>
+        {% endif %}
+        <p><strong>Author:</strong> <a href="/profile/{{ submission.author.id }}">{{ submission.author.username }}</a></p>
+    </div>
+
+    {% if criteria %}
+        <div class="card">
+            <h2>Score This Submission</h2>
+            <form method="POST">
+                <label for="criteria_id">Criterion</label>
+                <select name="criteria_id" id="criteria_id" required>
+                    {% for c in criteria %}
+                        <option value="{{ c.id }}">
+                            {{ c.name }} (Max: {{ c.max_score }})
+                            {% if c.id in my_scores %} - Your score: {{ my_scores[c.id].score }}{% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <label for="score">Score</label>
+                <input type="number" name="score" id="score" min="0" max="100" required>
+
+                <label for="feedback">Feedback</label>
+                <textarea name="feedback" id="feedback" placeholder="Your feedback for this submission"></textarea>
+
+                <button type="submit">Save Score</button>
+            </form>
+        </div>
+    {% else %}
+        <div class="empty-state card">
+            <h3>No judging criteria defined</h3>
+            <p>The organizer needs to add criteria first.</p>
+        </div>
+    {% endif %}
+
+    {% if my_scores %}
+        <div class="card">
+            <h2>Your Scores</h2>
+            {% for c in criteria %}
+                {% if c.id in my_scores %}
+                    <div class="score-item">
+                        <strong>{{ c.name }}:</strong> {{ my_scores[c.id].score }}/{{ c.max_score }}
+                        {% if my_scores[c.id].feedback %}
+                            <p>{{ my_scores[c.id].feedback }}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

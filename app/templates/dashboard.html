@@ -1,85 +1,62 @@
 {% extends "base.html" %}
+{% block title %}Dashboard - HackForge{% endblock %}
 
 {% block content %}
-
-<h1>
-    Welcome Back, {{ user.username }}
-</h1>
-
-<p>
-    Manage your hackatons, teams, and projects from one place.
-</p>
+<div class="dashboard-header">
+    <h1>Welcome, {{ user.username }}!</h1>
+    <p class="role-badge role-{{ user.role }}">{{ user.role.title() }}</p>
+</div>
 
 <div class="stats-grid">
-
     <div class="stat-card">
         <h2>{{ hackathons|length }}</h2>
         <p>Hackathons</p>
     </div>
-
     <div class="stat-card">
-        <h2>0</h2>
+        <h2>{{ team_count }}</h2>
         <p>Teams</p>
     </div>
-
     <div class="stat-card">
-        <h2>0</h2>
+        <h2>{{ submission_count }}</h2>
         <p>Projects</p>
     </div>
+</div>
 
+<div class="dashboard-actions">
+    <h2>Quick Actions</h2>
+    <div class="action-buttons">
+        {% if user.role == "organizer" %}
+            <a href="/hackathons/create" class="btn-primary">Create Hackathon</a>
+        {% endif %}
+        <a href="/hackathons" class="btn-secondary">Browse Hackathons</a>
+        <a href="/projects/submit" class="btn-secondary">Submit Project</a>
+        <a href="/profile/edit" class="btn-secondary">Edit Profile</a>
+        <a href="/opportunities" class="btn-secondary">Opportunities</a>
+    </div>
 </div>
 
 <div class="card">
-
-    <h2>
-        Quick Actions
-    </h2>
-
-    <br>
-
-    <a href="/create-hackathon" class="btn-primary">
-        Create Hackathon
-    </a>
-    
-</div>
-
-<br>
-
-<div class="card">
-
     <h2>Your Hackathons</h2>
-
-    <br>
-
-    {% for hackathon in hackathons %}
-
-       <div class="hackathon-item">
-
-        <h3>{{ hackathon.title }}</h3>
-
-        <p>{{ hackathon.description }}</p>
-
-        <br>
-
-        <small>
-            {{ hackathon.start_date }}
-            -
-            {{ hackathon.end_date }}
-        </small>
-
-
-       </div>
-
+    {% if hackathons %}
+        <div class="hackathon-grid">
+        {% for hackathon in hackathons %}
+            <a href="/hackathons/{{ hackathon.id }}" class="hackathon-card">
+                <h3>{{ hackathon.title }}</h3>
+                <span class="status-badge status-{{ hackathon.status }}">{{ hackathon.status_display }}</span>
+                <p>{{ hackathon.description[:120] }}{% if hackathon.description|length > 120 %}...{% endif %}</p>
+                <small>{{ hackathon.start_date }} &mdash; {{ hackathon.end_date }}</small>
+            </a>
+        {% endfor %}
+        </div>
     {% else %}
-
-       <p>
-        You haven't created any hackathon yet.
-       </p>
-
-    {% endfor %}
-
+        <div class="empty-state">
+            <p>No hackathons yet.</p>
+            {% if user.role == "organizer" %}
+                <a href="/hackathons/create" class="btn-primary">Create Your First Hackathon</a>
+            {% else %}
+                <a href="/hackathons" class="btn-primary">Browse Hackathons</a>
+            {% endif %}
+        </div>
+    {% endif %}
 </div>
-
 {% endblock %}
-
-

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Submit Project - HackForge{% endblock %}
+
+{% block content %}
+<div class="auth-box" style="max-width:600px">
+    <div class="card">
+        <h1>Submit Project</h1>
+        <form method="POST">
+            <label for="title">Project Name *</label>
+            <input type="text" name="title" id="title" placeholder="Your project name" required>
+
+            <label for="description">Description *</label>
+            <textarea name="description" id="description" placeholder="Describe your project" required></textarea>
+
+            <label for="problem">Problem Statement</label>
+            <textarea name="problem" id="problem" placeholder="What problem does this solve?"></textarea>
+
+            <label for="solution">Solution</label>
+            <textarea name="solution" id="solution" placeholder="How did you solve it?"></textarea>
+
+            <label for="technologies">Technologies (comma-separated)</label>
+            <input type="text" name="technologies" id="technologies" placeholder="Python, Flask, React">
+
+            <label for="github_url">GitHub URL</label>
+            <input type="url" name="github_url" id="github_url" placeholder="https://github.com/...">
+
+            <label for="demo_url">Live Demo URL</label>
+            <input type="url" name="demo_url" id="demo_url" placeholder="https://...">
+
+            <label for="extra_links">Additional Links</label>
+            <input type="text" name="extra_links" id="extra_links" placeholder="Any other relevant links">
+
+            <label for="hackathon_id">Hackathon *</label>
+            <select name="hackathon_id" id="hackathon_id" required>
+                <option value="">Select a hackathon</option>
+                {% for hackathon in hackathons %}
+                    <option value="{{ hackathon.id }}" {% if selected_hackathon and selected_hackathon|string == hackathon.id|string %}selected{% endif %}>
+                        {{ hackathon.title }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label for="team_id">Team (optional)</label>
+            <select name="team_id" id="team_id">
+                <option value="">Individual submission</option>
+                {% for team in my_teams %}
+                    <option value="{{ team.id }}">{{ team.name }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Submit Project</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Results - {{ hackathon.title }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <a href="/hackathons/{{ hackathon.id }}" class="back-link">&larr; Back to {{ hackathon.title }}</a>
+    <h1>Results: {{ hackathon.title }}</h1>
+</div>
+
+{% if results_data %}
+    <div class="card">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Project</th>
+                    <th>Team</th>
+                    <th>Total Score</th>
+                    <th>Average</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in results_data %}
+                    <tr class="{% if r.rank == 1 %}winner-row{% elif r.rank == 2 %}runner-up-row{% elif r.rank == 3 %}third-row{% endif %}">
+                        <td>
+                            <span class="rank rank-{{ r.rank }}">
+                                {% if r.rank == 1 %}&#127942;{% elif r.rank == 2 %}&#129352;{% elif r.rank == 3 %}&#129353;{% endif %}
+                                {{ r.rank }}
+                            </span>
+                        </td>
+                        <td><a href="/projects/{{ r.submission.id }}">{{ r.submission.title }}</a></td>
+                        <td>{{ r.team_name }}</td>
+                        <td><strong>{{ r.total_score }}</strong></td>
+                        <td>{{ r.average_score }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="projects-grid" style="margin-top:30px">
+        {% for r in results_data %}
+            <a href="/projects/{{ r.submission.id }}" class="project-card">
+                <div class="card-header">
+                    <h3>{{ r.submission.title }}</h3>
+                    {% if r.rank <= 3 %}
+                        <span class="rank-badge rank-{{ r.rank }}">
+                            {% if r.rank == 1 %}1st Place{% elif r.rank == 2 %}2nd Place{% else %}3rd Place{% endif %}
+                        </span>
+                    {% endif %}
+                </div>
+                <p>{{ r.submission.description[:100] }}{% if r.submission.description|length > 100 %}...{% endif %}</p>
+                <div class="tech-tags">
+                    {% for tech in r.submission.technologies_list[:4] %}
+                        <span class="tech-tag">{{ tech }}</span>
+                    {% endfor %}
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state card">
+        <h3>No results yet</h3>
+        <p>Submissions need to be scored before results are available.</p>
+    </div>
+{% endif %}
+{% endblock %}

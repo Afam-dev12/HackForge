@@ -3,105 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HackForge</title>
-
+    <title>{% block title %}HackForge{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-     <nav>
-
-        <a href="/" class="logo">
-         HackForge
-        </a>
-
+    <nav>
+        <a href="/" class="logo">HackForge</a>
         <div class="nav-links">
-
             {% if current_user.is_authenticated %}
-
-               <a href="/">Home</a>
-
-               <a href="/dashboard">
-                Dashboard
-               </a>
-
-               <a href="/hackathons">
-                  Hackathons
-               </a>
-
-               {% if current_user.role == "organizer" %}
-                  <a href="/create-hackathon">
-                     Create Hackathon
-                  </a>
-               {% endif %}
-
-               <a href="/logout">
-                Logout
-               </a>
-
+                <a href="/dashboard">Dashboard</a>
+                <a href="/hackathons">Hackathons</a>
+                <a href="/projects">Projects</a>
+                <a href="/opportunities">Opportunities</a>
+                <a href="/builders">Builders</a>
+                {% if current_user.role == "organizer" %}
+                    <a href="/hackathons/create">Create Hackathon</a>
+                {% endif %}
+                <a href="/profile/{{ current_user.id }}">{{ current_user.username }}</a>
+                <a href="/logout">Logout</a>
             {% else %}
-
-               <a href="/">
-                Home
-               </a>
-
-               <a href="/hackathons">
-                  Hackathons
-               </a>
-
-               <a href="login">
-                Login
-               </a>
-
-               <a href="/register">
-                Register
-               </a>
-
+                <a href="/hackathons">Hackathons</a>
+                <a href="/projects">Projects</a>
+                <a href="/opportunities">Opportunities</a>
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
             {% endif %}
-
         </div>
-        
-     </nav>
+        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+            &#9776;
+        </button>
+    </nav>
 
-     {% with messages = get_flashed_messages() %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">
+                        {{ message }}
+                        <button class="flash-close" onclick="this.parentElement.remove()">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 
-           {% for message in messages %}
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
 
-              <div class="flash-message">
-               {{ message }}
-              </div>
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 CHASLA TECH INNOVATION. HACKFORGE &mdash; Discover, Connect, Build, Launch, Grow.</p>
+        </div>
+    </footer>
 
-            {% endfor %}
-
-         {% endif %}
-      {% endwith %}
-
-     <div class="container">
-        {% block content %}
-        {% endblock %}
-     </div>
-
-     <script>
-
-      setTimeout(() => {
-
-         const flashes =
-            document.querySelectorAll(".flash-message");
-         flashes.forEach(flash => {
-
-            flash.style.opacity = "0";
-
-            setTimeout(() => {
-
-               flash.remove();
-
-            }, 500);
-
-         });
-            
-      }, 4000);
-
-     </script>
-      
+    <script>
+        setTimeout(() => {
+            document.querySelectorAll(".flash-message").forEach(el => {
+                el.style.opacity = "0";
+                setTimeout(() => el.remove(), 500);
+            });
+        }, 5000);
+    </script>
 </body>
 </html>

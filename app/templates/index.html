@@ -1,33 +1,63 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 <section class="hero">
-
-    <h1>
-        Run and Manage Amazing Hackathons
-    </h1>
-
-    <p>
-        Create hackathons, build teams,
-        submit projects, and evaluate winner
-        from one platform.
-
-        Create events, build projects,
-        and collaborate with innovators.
-    </p>
-
+    <h1>Where Young Builders <span class="highlight">Discover</span>, <span class="highlight">Connect</span>, <span class="highlight">Build</span>, <span class="highlight">Launch</span> &amp; <span class="highlight">Grow</span></h1>
+    <p>HackForge brings together developers, designers, and innovators. Find hackathons, form teams, build projects, and discover opportunities &mdash; all in one platform.</p>
     <div class="hero-buttons">
-         <a href="/register/organizer" class="btn-primary">
-            Create as Organizer
-         </a>
-
-         <a href="/register/participant" class="btn-secondary">
-            Join as Participant      
-         </a>
-
+        <a href="/register/organizer" class="btn-primary">Create as Organizer</a>
+        <a href="/register/participant" class="btn-secondary">Join as Builder</a>
     </div>
-    
 </section>
 
+<section class="features-section">
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">&#128269;</div>
+            <h3>Discover</h3>
+            <p>Find hackathons, scholarships, internships, and opportunities tailored for young African builders and global innovators.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#129309;</div>
+            <h3>Connect</h3>
+            <p>Find teammates, collaborators, and mentors. Build with talented people who share your vision and drive.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128736;</div>
+            <h3>Build</h3>
+            <p>Create projects, form teams, and develop real solutions. Turn your ideas into prototypes and products.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128640;</div>
+            <h3>Launch</h3>
+            <p>Showcase your work, compete in hackathons, and present your projects to the world.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#127793;</div>
+            <h3>Grow</h3>
+            <p>Get feedback, discover the next opportunity, and continue building beyond any single competition.</p>
+        </div>
+    </div>
+</section>
+
+<section class="stats-banner">
+    <div class="stat-item">
+        <h2>Hackathons</h2>
+        <p>Compete and build real solutions</p>
+    </div>
+    <div class="stat-item">
+        <h2>Opportunities</h2>
+        <p>Scholarships, internships &amp; more</p>
+    </div>
+    <div class="stat-item">
+        <h2>Builder Network</h2>
+        <p>Find your next collaborator</p>
+    </div>
+</section>
+
+<section class="cta-section">
+    <h2>Ready to start building?</h2>
+    <p>Join a growing community of young innovators across Africa and beyond.</p>
+    <a href="/register/participant" class="btn-primary">Get Started Free</a>
+</section>
 {% endblock %}

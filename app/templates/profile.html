@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Profile - {{ profile_user.username }}{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+    <div class="profile-header card">
+        <div class="profile-info">
+            <div class="builder-avatar large">{{ profile_user.username[0].upper() }}</div>
+            <div>
+                <h1>{{ profile_user.username }}</h1>
+                <span class="role-badge role-{{ profile_user.role }}">{{ profile_user.role.title() }}</span>
+                {% if profile_user.location %}<span class="location">&nbsp;&#128205; {{ profile_user.location }}</span>{% endif %}
+                {% if profile_user.experience_level %}<span class="experience">&nbsp;&#127919; {{ profile_user.experience_level }}</span>{% endif %}
+            </div>
+        </div>
+        {% if current_user.is_authenticated and current_user.id == profile_user.id %}
+            <a href="/profile/edit" class="btn-secondary">Edit Profile</a>
+        {% endif %}
+    </div>
+
+    {% if profile_user.bio %}
+        <div class="card">
+            <h2>About</h2>
+            <p class="description-text">{{ profile_user.bio }}</p>
+        </div>
+    {% endif %}
+
+    <div class="profile-details">
+        {% if profile_user.skills_list %}
+            <div class="card">
+                <h2>Skills</h2>
+                <div class="tech-tags">
+                    {% for skill in profile_user.skills_list %}
+                        <span class="tech-tag">{{ skill }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if profile_user.interests_list %}
+            <div class="card">
+                <h2>Interests</h2>
+                <div class="tech-tags">
+                    {% for interest in profile_user.interests_list %}
+                        <span class="tech-tag tag-secondary">{{ interest }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="card">
+            <h2>Links</h2>
+            <div class="info-list">
+                {% if profile_user.github_url %}
+                    <div class="info-item">
+                        <strong>GitHub</strong>
+                        <a href="{{ profile_user.github_url }}" target="_blank">{{ profile_user.github_url }}</a>
+                    </div>
+                {% endif %}
+                {% if profile_user.portfolio_url %}
+                    <div class="info-item">
+                        <strong>Portfolio</strong>
+                        <a href="{{ profile_user.portfolio_url }}" target="_blank">{{ profile_user.portfolio_url }}</a>
+                    </div>
+                {% endif %}
+                {% if not profile_user.github_url and not profile_user.portfolio_url %}
+                    <p>No links added yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if submissions %}
+        <div class="card">
+            <h2>Projects ({{ submissions|length }})</h2>
+            <div class="projects-grid">
+                {% for sub in submissions %}
+                    <a href="/projects/{{ sub.id }}" class="project-card">
+                        <h3>{{ sub.title }}</h3>
+                        <p>{{ sub.description[:100] }}{% if sub.description|length > 100 %}...{% endif %}</p>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    {% if registrations %}
+        <div class="card">
+            <h2>Hackathon Participation ({{ registrations|length }})</h2>
+            <div class="hackathon-grid">
+                {% for reg in registrations %}
+                    <a href="/hackathons/{{ reg.hackathon.id }}" class="hackathon-card">
+                        <h3>{{ reg.hackathon.title }}</h3>
+                        <span class="status-badge status-{{ reg.hackathon.status }}">{{ reg.hackathon.status_display }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
