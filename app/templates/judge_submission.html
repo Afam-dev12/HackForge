@@ -3,38 +3,42 @@
 
 {% block content %}
 <div class="detail-page">
-    <a href="/judging/hackathon/{{ hackathon.id }}" class="back-link">&larr; Back to Judging</a>
+    <a href="/judging/hackathon/{{ hackathon.id }}" class="back-link">&larr; Back to judging</a>
 
-    <div class="card" style="margin-top:20px">
-        <h1>{{ submission.title }}</h1>
+    <div class="card" style="margin-top:8px">
+        <h1 style="font-size:1.375rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px">{{ submission.title }}</h1>
         <p>{{ submission.description }}</p>
         {% if submission.team %}
-            <p><strong>Team:</strong> {{ submission.team.name }}</p>
+            <p style="margin-top:8px"><strong>Team:</strong> {{ submission.team.name }}</p>
         {% endif %}
         <p><strong>Author:</strong> <a href="/profile/{{ submission.author.id }}">{{ submission.author.username }}</a></p>
     </div>
 
     {% if criteria %}
         <div class="card">
-            <h2>Score This Submission</h2>
+            <h2>Score this submission</h2>
             <form method="POST">
-                <label for="criteria_id">Criterion</label>
-                <select name="criteria_id" id="criteria_id" required>
-                    {% for c in criteria %}
-                        <option value="{{ c.id }}">
-                            {{ c.name }} (Max: {{ c.max_score }})
-                            {% if c.id in my_scores %} - Your score: {{ my_scores[c.id].score }}{% endif %}
-                        </option>
-                    {% endfor %}
-                </select>
-
-                <label for="score">Score</label>
-                <input type="number" name="score" id="score" min="0" max="100" required>
-
-                <label for="feedback">Feedback</label>
-                <textarea name="feedback" id="feedback" placeholder="Your feedback for this submission"></textarea>
-
-                <button type="submit">Save Score</button>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="form-group">
+                    <label for="criteria_id">Criterion</label>
+                    <select name="criteria_id" id="criteria_id" required>
+                        {% for c in criteria %}
+                            <option value="{{ c.id }}">
+                                {{ c.name }} (Max: {{ c.max_score }})
+                                {% if c.id in my_scores %} - Your score: {{ my_scores[c.id].score }}{% endif %}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="score">Score</label>
+                    <input type="number" name="score" id="score" min="0" max="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="feedback">Feedback</label>
+                    <textarea name="feedback" id="feedback" placeholder="Your feedback for this submission" style="min-height:80px"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Save score</button>
             </form>
         </div>
     {% else %}
@@ -46,13 +50,13 @@
 
     {% if my_scores %}
         <div class="card">
-            <h2>Your Scores</h2>
+            <h2>Your scores</h2>
             {% for c in criteria %}
                 {% if c.id in my_scores %}
                     <div class="score-item">
                         <strong>{{ c.name }}:</strong> {{ my_scores[c.id].score }}/{{ c.max_score }}
                         {% if my_scores[c.id].feedback %}
-                            <p>{{ my_scores[c.id].feedback }}</p>
+                            <p style="margin-top:4px;color:var(--color-text-secondary);font-size:0.875rem">{{ my_scores[c.id].feedback }}</p>
                         {% endif %}
                     </div>
                 {% endif %}

@@ -1,3 +1,6 @@
+import re
+from urllib.parse import urlparse
+
 from flask import render_template, redirect, url_for, request, flash
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -33,6 +36,9 @@ def register(role="participant"):
             errors.append("Username is required.")
         if not email:
             errors.append("Email is required.")
+        email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if email and not re.match(email_pattern, email):
+            errors.append("Please enter a valid email address.")
         if len(password) < 6:
             errors.append("Password must be at least 6 characters.")
         if password != confirm_password:
@@ -56,8 +62,9 @@ def register(role="participant"):
         db.session.add(user)
         db.session.commit()
 
-        flash("Account created! Please log in.", "success")
-        return redirect(url_for("auth.login"))
+        login_user(user)
+        flash("Account created! Welcome to HackForge.", "success")
+        return redirect(url_for("dashboard.dashboard_page"))
 
     return render_template("register.html", role=role)
 
@@ -77,6 +84,8 @@ def login():
             login_user(user)
             flash("Welcome back!", "success")
             next_page = request.args.get("next")
+            if next_page and urlparse(next_page).netloc:
+                next_page = None
             return redirect(next_page or url_for("dashboard.dashboard_page"))
         else:
             flash("Invalid email or password.", "error")
@@ -95,16 +104,24 @@ def logout():
 @auth_bp.route("/profile/<int:user_id>")
 def profile(user_id):
     user = User.query.get_or_404(user_id)
-    from app.models import HackathonRegistration, TeamMember, Submission
+    from app.models import HackathonRegistration, TeamMember, Submission, Team
     registrations = HackathonRegistration.query.filter_by(user_id=user.id).all()
     team_memberships = TeamMember.query.filter_by(user_id=user.id).all()
     submissions = Submission.query.filter_by(author_id=user.id).all()
+
+    my_teams = []
+    for tm in team_memberships:
+        team = db.session.get(Team, tm.team_id)
+        if team:
+            my_teams.append(team)
+
     return render_template(
         "profile.html",
         profile_user=user,
         registrations=registrations,
         team_memberships=team_memberships,
         submissions=submissions,
+        my_teams=my_teams,
     )
 
 

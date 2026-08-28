@@ -7,7 +7,7 @@
         <div>
             <h1>{{ submission.title }}</h1>
             <div class="detail-meta">
-                <span>&#127942; {{ submission.hackathon.title }}</span>
+                <span>{{ submission.hackathon.title }}</span>
                 <span>by <a href="/profile/{{ submission.author.id }}">{{ submission.author.username }}</a></span>
                 {% if submission.team %}
                     <span>Team: {{ submission.team.name }}</span>
@@ -40,19 +40,22 @@
 
         <div class="detail-sidebar">
             <div class="card">
-                <h3>Project Links</h3>
+                <h3>Project links</h3>
                 <div class="info-list">
                     {% if submission.github_url %}
                         <div class="info-item">
                             <strong>GitHub</strong>
-                            <a href="{{ submission.github_url }}" target="_blank">View Code</a>
+                            <a href="{{ submission.github_url }}" target="_blank">View code</a>
                         </div>
                     {% endif %}
                     {% if submission.demo_url %}
                         <div class="info-item">
                             <strong>Demo</strong>
-                            <a href="{{ submission.demo_url }}" target="_blank">Live Demo</a>
+                            <a href="{{ submission.demo_url }}" target="_blank">Live demo</a>
                         </div>
+                    {% endif %}
+                    {% if not submission.github_url and not submission.demo_url %}
+                        <p>No links added.</p>
                     {% endif %}
                 </div>
             </div>
@@ -71,8 +74,16 @@
             {% if submission.scores %}
                 <div class="card">
                     <h3>Judging</h3>
-                    <p>Average Score: <strong>{{ submission.average_score }}</strong></p>
-                    <p>Total Score: <strong>{{ submission.total_score }}</strong></p>
+                    <div class="info-list">
+                        <div class="info-item">
+                            <strong>Average score</strong>
+                            <span>{{ submission.average_score }}</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Total score</strong>
+                            <span>{{ submission.total_score }}</span>
+                        </div>
+                    </div>
                 </div>
             {% endif %}
         </div>

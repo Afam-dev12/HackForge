@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="page-header">
-    <h1>Project Showcase</h1>
+    <h1>Project showcase</h1>
     <p>Discover projects built by our community.</p>
 </div>
 
@@ -19,7 +19,7 @@
                     {% endfor %}
                 </div>
                 <div class="card-meta">
-                    <span>&#127942; {{ sub.hackathon.title }}</span>
+                    <span>{{ sub.hackathon.title }}</span>
                     <span>by {{ sub.author.username }}</span>
                 </div>
             </a>
@@ -28,7 +28,7 @@
 {% else %}
     <div class="empty-state card">
         <h3>No projects yet</h3>
-        <p>Be the first to submit a project!</p>
+        <p>Be the first to submit a project.</p>
     </div>
 {% endif %}
 {% endblock %}

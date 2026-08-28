@@ -104,6 +104,11 @@ def join_team(team_id):
         flash("You are already in a team for this hackathon.", "error")
         return redirect(url_for("teams.team_detail", team_id=team.id))
 
+    hackathon = Hackathon.query.get(team.hackathon_id)
+    if hackathon and team.member_count >= hackathon.max_team_size:
+        flash("This team is full.", "error")
+        return redirect(url_for("teams.team_detail", team_id=team.id))
+
     member = TeamMember(team_id=team.id, user_id=current_user.id, role="member")
     db.session.add(member)
     db.session.commit()

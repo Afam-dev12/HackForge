@@ -31,6 +31,7 @@ def opportunities_list():
         categories=CATEGORIES,
         selected_category=category,
         search=search,
+        auth_required=not current_user.is_authenticated,
     )
 
 
@@ -46,6 +47,7 @@ def opportunity_detail(opportunity_id):
         "opportunity_detail.html",
         opportunity=opportunity,
         is_saved=is_saved,
+        auth_required=not current_user.is_authenticated,
     )
 
 

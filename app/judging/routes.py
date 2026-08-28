@@ -60,6 +60,10 @@ def judge_submission(submission_id):
     submission = Submission.query.get_or_404(submission_id)
     hackathon = submission.hackathon
 
+    if hackathon.created_by != current_user.id and current_user.role not in ("judge", "admin"):
+        flash("You do not have permission to score this submission.", "error")
+        return redirect(url_for("hackathons.hackathon_detail", hackathon_id=hackathon.id))
+
     if request.method == "POST":
         criteria_id = request.form.get("criteria_id", type=int)
         score_val = request.form.get("score", type=int)

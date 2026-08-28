@@ -4,17 +4,18 @@
 {% block content %}
 <div class="page-header">
     <a href="/hackathons/{{ hackathon.id }}" class="back-link">&larr; Back to {{ hackathon.title }}</a>
-    <h1>Judging Dashboard</h1>
+    <h1>Judging dashboard</h1>
 </div>
 
 {% if current_user.id == hackathon.created_by %}
 <div class="card">
-    <h2>Add Judging Criteria</h2>
+    <h2>Add judging criteria</h2>
     <form method="POST" action="/judging/hackathon/{{ hackathon.id }}/criteria" class="inline-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input type="text" name="name" placeholder="Criterion name" required>
         <input type="text" name="description" placeholder="Description (optional)">
         <input type="number" name="max_score" value="10" min="1" max="100" style="width:80px">
-        <button type="submit" class="btn-sm">Add</button>
+        <button type="submit" class="btn btn-primary btn-sm">Add</button>
     </form>
 </div>
 {% endif %}
@@ -27,7 +28,7 @@
                 <div class="criteria-item">
                     <strong>{{ c.name }}</strong>
                     <span>(Max: {{ c.max_score }})</span>
-                    {% if c.description %}<p>{{ c.description }}</p>{% endif %}
+                    {% if c.description %}<p style="margin-top:4px;color:var(--color-text-secondary);font-size:0.875rem">{{ c.description }}</p>{% endif %}
                 </div>
             {% endfor %}
         </div>
@@ -53,7 +54,7 @@
                         <td>{{ sub.team.name if sub.team else "Individual" }}</td>
                         <td><a href="/profile/{{ sub.author.id }}">{{ sub.author.username }}</a></td>
                         <td>
-                            <a href="/judging/submission/{{ sub.id }}" class="btn-sm">Score</a>
+                            <a href="/judging/submission/{{ sub.id }}" class="btn btn-secondary btn-sm">Score</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -63,10 +64,11 @@
 {% else %}
     <div class="empty-state card">
         <h3>No submissions yet</h3>
+        <p>Waiting for participants to submit their projects.</p>
     </div>
 {% endif %}
 
-<div class="card" style="margin-top:20px">
-    <a href="/results/hackathon/{{ hackathon.id }}" class="btn-primary">View Results</a>
+<div style="margin-top:16px">
+    <a href="/results/hackathon/{{ hackathon.id }}" class="btn btn-primary">View results</a>
 </div>
 {% endblock %}

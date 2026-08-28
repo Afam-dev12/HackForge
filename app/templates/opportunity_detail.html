@@ -3,19 +3,31 @@
 
 {% block content %}
 <div class="detail-page">
+    {% if auth_required %}
+        <div class="auth-gate" style="margin-bottom:32px">
+            <h2>Sign in to save this opportunity</h2>
+            <p>Create a free account to save opportunities, track applications, and get personalized recommendations.</p>
+            <div class="gate-actions">
+                <a href="/register" class="btn btn-primary">Sign up free</a>
+                <a href="/login" class="btn btn-secondary">Log in</a>
+            </div>
+        </div>
+    {% endif %}
+
     <div class="detail-header">
         <div>
             <h1>{{ opportunity.title }}</h1>
             <div class="detail-meta">
                 <span class="category-tag">{{ opportunity.category }}</span>
                 {% if opportunity.organization %}<span>{{ opportunity.organization }}</span>{% endif %}
-                <span>&#128205; {{ opportunity.location }}</span>
-                {% if opportunity.deadline %}<span>&#128197; Deadline: {{ opportunity.deadline }}</span>{% endif %}
+                <span>{{ opportunity.location }}</span>
+                {% if opportunity.deadline %}<span>Deadline: {{ opportunity.deadline }}</span>{% endif %}
             </div>
         </div>
         {% if current_user.is_authenticated %}
             <form method="POST" action="/opportunities/{{ opportunity.id }}/save" style="display:inline">
-                <button type="submit" class="{% if is_saved %}btn-secondary{% else %}btn-primary{% endif %}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn {% if is_saved %}btn-secondary{% else %}btn-primary{% endif %} btn-sm">
                     {% if is_saved %}Unsave{% else %}Save{% endif %}
                 </button>
             </form>
@@ -44,7 +56,7 @@
                     {% if opportunity.url %}
                         <div class="info-item">
                             <strong>Link</strong>
-                            <a href="{{ opportunity.url }}" target="_blank">Apply / Learn More</a>
+                            <a href="{{ opportunity.url }}" target="_blank">Apply / Learn more</a>
                         </div>
                     {% endif %}
                     <div class="info-item">

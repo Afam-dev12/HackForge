@@ -55,7 +55,7 @@ def test_judging_dashboard(client, db):
     _login(client, "orgj@test.com")
     resp = client.get(f"/judging/hackathon/{env['hackathon_id']}")
     assert resp.status_code == 200
-    assert b"Judging Dashboard" in resp.data
+    assert b"Judging dashboard" in resp.data
 
 
 def test_unauthorized_judging(client, db):
@@ -133,3 +133,31 @@ def test_calculate_average_score(client, db):
 
         assert sub.total_score == 14
         assert sub.average_score == 7.0
+
+
+def test_participant_cannot_score_submission(client, db):
+    env = _setup_judging_env(client, db)
+    _login(client, "bj@test.com")
+    resp = client.post(f"/judging/submission/{env['submission_id']}", data={
+        "criteria_id": env["criteria_id"],
+        "score": 8,
+    }, follow_redirects=True)
+    assert b"do not have permission" in resp.data
+
+
+def test_participant_cannot_view_judge_submission_page(client, db):
+    env = _setup_judging_env(client, db)
+    _login(client, "bj@test.com")
+    resp = client.get(f"/judging/submission/{env['submission_id']}", follow_redirects=True)
+    assert b"do not have permission" in resp.data
+
+
+def test_organizer_can_score_own_hackathon(client, db):
+    env = _setup_judging_env(client, db)
+    _login(client, "orgj@test.com")
+    resp = client.post(f"/judging/submission/{env['submission_id']}", data={
+        "criteria_id": env["criteria_id"],
+        "score": 7,
+        "feedback": "Good effort",
+    }, follow_redirects=True)
+    assert b"Score saved" in resp.data

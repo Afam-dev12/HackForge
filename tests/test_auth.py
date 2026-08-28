@@ -27,12 +27,14 @@ def test_register_success(client, db):
 
 def test_register_duplicate_email(client, db):
     _create_user(client, email="dup@test.com")
+    client.get("/logout", follow_redirects=True)
     resp = _create_user(client, username="other", email="dup@test.com")
     assert b"Email already registered" in resp.data
 
 
 def test_register_duplicate_username(client, db):
     _create_user(client, username="taken")
+    client.get("/logout", follow_redirects=True)
     resp = _create_user(client, username="taken", email="other@test.com")
     assert b"Username already taken" in resp.data
 
@@ -66,6 +68,7 @@ def test_login_success(client, db):
 
 def test_login_wrong_password(client, db):
     _create_user(client)
+    client.get("/logout", follow_redirects=True)
     resp = _login(client, password="wrongpassword")
     assert b"Invalid email or password" in resp.data
 
@@ -84,7 +87,7 @@ def test_logout(client, db):
 
 def test_protected_route(client, db):
     resp = client.get("/dashboard", follow_redirects=True)
-    assert b"Login" in resp.data or b"Welcome Back" in resp.data
+    assert b"Log in" in resp.data or b"Welcome back" in resp.data
 
 
 def test_dashboard_access_after_login(client, db):
@@ -119,3 +122,30 @@ def test_register_redirect_if_already_logged_in(client, db):
     _login(client)
     resp = client.get("/register", follow_redirects=True)
     assert b"Welcome" in resp.data
+
+
+def test_login_blocks_external_redirect(client, db):
+    _create_user(client)
+    resp = client.post("/login?next=http://evil.com", data={
+        "email": "test@test.com", "password": "pass123",
+    }, follow_redirects=True)
+    assert resp.status_code == 200
+    assert b"Dashboard" in resp.data or b"Welcome" in resp.data
+
+
+def test_login_allows_internal_redirect(client, db):
+    _create_user(client)
+    client.get("/logout", follow_redirects=True)
+    resp = client.post("/login?next=/hackathons", data={
+        "email": "test@test.com", "password": "pass123",
+    })
+    assert resp.status_code == 302
+    assert "/hackathons" in resp.headers["Location"]
+
+
+def test_register_invalid_email_format(client, db):
+    resp = client.post("/register/participant", data={
+        "username": "emailtest", "email": "notanemail",
+        "password": "pass123", "confirm_password": "pass123",
+    }, follow_redirects=True)
+    assert b"valid email" in resp.data

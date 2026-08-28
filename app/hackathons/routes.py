@@ -50,6 +50,10 @@ def hackathon_detail(hackathon_id):
 def register_for_hackathon(hackathon_id):
     hackathon = Hackathon.query.get_or_404(hackathon_id)
 
+    if hackathon.status == "completed":
+        flash("This hackathon has ended and is no longer accepting registrations.", "error")
+        return redirect(url_for("hackathons.hackathon_detail", hackathon_id=hackathon.id))
+
     existing = HackathonRegistration.query.filter_by(
         user_id=current_user.id, hackathon_id=hackathon.id
     ).first()
@@ -68,6 +72,11 @@ def register_for_hackathon(hackathon_id):
 @hackathon_bp.route("/hackathons/<int:hackathon_id>/unregister", methods=["POST"])
 @login_required
 def unregister_from_hackathon(hackathon_id):
+    hackathon = Hackathon.query.get_or_404(hackathon_id)
+    if hackathon.status == "completed":
+        flash("This hackathon has ended.", "error")
+        return redirect(url_for("hackathons.hackathon_detail", hackathon_id=hackathon_id))
+
     reg = HackathonRegistration.query.filter_by(
         user_id=current_user.id, hackathon_id=hackathon_id
     ).first()

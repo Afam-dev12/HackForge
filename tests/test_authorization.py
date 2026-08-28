@@ -22,22 +22,22 @@ def test_organizer_can_create_hackathon(client, db):
     _register_and_login(client, username="org_access", email="orga@test.com", role="organizer")
     resp = client.get("/hackathons/create")
     assert resp.status_code == 200
-    assert b"Create Hackathon" in resp.data
+    assert b"Create hackathon" in resp.data
 
 
 def test_unauthenticated_cannot_submit(client, db):
     resp = client.get("/projects/submit", follow_redirects=True)
-    assert b"Login" in resp.data or b"Welcome Back" in resp.data
+    assert b"Log in" in resp.data or b"Welcome back" in resp.data
 
 
 def test_unauthenticated_cannot_create_team(client, db):
     resp = client.get("/teams/create", follow_redirects=True)
-    assert b"Login" in resp.data or b"Welcome Back" in resp.data
+    assert b"Log in" in resp.data or b"Welcome back" in resp.data
 
 
 def test_unauthenticated_cannot_edit_profile(client, db):
     resp = client.get("/profile/edit", follow_redirects=True)
-    assert b"Login" in resp.data or b"Welcome Back" in resp.data
+    assert b"Log in" in resp.data or b"Welcome back" in resp.data
 
 
 def test_organizer_cannot_judge_others_hackathon(client, db):
@@ -86,3 +86,43 @@ def test_home_shows_landing_for_anonymous(client, db):
     resp = client.get("/")
     assert resp.status_code == 200
     assert b"Discover" in resp.data and b"Build" in resp.data
+
+
+def test_404_page(client, db):
+    resp = client.get("/nonexistent-page-xyz")
+    assert resp.status_code == 404
+    assert b"404" in resp.data
+
+
+def test_cannot_register_for_completed_hackathon(client, db):
+    with client.application.app_context():
+        org = User(username="org_completed", email="orgc@test.com", role="organizer")
+        org.set_password("pass123")
+        db.session.add(org)
+        db.session.flush()
+        h = Hackathon(title="Completed Hack", description="Already done",
+                       created_by=org.id, status="completed")
+        db.session.add(h)
+        db.session.commit()
+        h_id = h.id
+
+    _register_and_login(client, username="late_reg", email="lr@test.com")
+    resp = client.post(f"/hackathons/{h_id}/register", follow_redirects=True)
+    assert b"has ended" in resp.data
+
+
+def test_cannot_unregister_from_completed_hackathon(client, db):
+    with client.application.app_context():
+        org = User(username="org_completed2", email="orgc2@test.com", role="organizer")
+        org.set_password("pass123")
+        db.session.add(org)
+        db.session.flush()
+        h = Hackathon(title="Completed Hack 2", description="Done too",
+                       created_by=org.id, status="completed")
+        db.session.add(h)
+        db.session.commit()
+        h_id = h.id
+
+    _register_and_login(client, username="late_reg2", email="lr2@test.com")
+    resp = client.post(f"/hackathons/{h_id}/unregister", follow_redirects=True)
+    assert b"has ended" in resp.data

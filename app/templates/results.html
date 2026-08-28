@@ -15,7 +15,7 @@
                     <th>Rank</th>
                     <th>Project</th>
                     <th>Team</th>
-                    <th>Total Score</th>
+                    <th>Total score</th>
                     <th>Average</th>
                 </tr>
             </thead>
@@ -24,7 +24,6 @@
                     <tr class="{% if r.rank == 1 %}winner-row{% elif r.rank == 2 %}runner-up-row{% elif r.rank == 3 %}third-row{% endif %}">
                         <td>
                             <span class="rank rank-{{ r.rank }}">
-                                {% if r.rank == 1 %}&#127942;{% elif r.rank == 2 %}&#129352;{% elif r.rank == 3 %}&#129353;{% endif %}
                                 {{ r.rank }}
                             </span>
                         </td>
@@ -38,7 +37,7 @@
         </table>
     </div>
 
-    <div class="projects-grid" style="margin-top:30px">
+    <div class="projects-grid" style="margin-top:24px">
         {% for r in results_data %}
             <a href="/projects/{{ r.submission.id }}" class="project-card">
                 <div class="card-header">

@@ -3,23 +3,34 @@
 
 {% block content %}
 <div class="page-header">
-    <h1>{{ page_title if page_title else "Opportunity Hub" }}</h1>
+    <h1>{{ page_title if page_title else "Opportunity hub" }}</h1>
     <p>Discover scholarships, internships, hackathons, and opportunities for young builders.</p>
 </div>
+
+{% if auth_required %}
+    <div class="auth-gate" style="margin-bottom:32px">
+        <h2>Sign in to unlock the full experience</h2>
+        <p>Create a free account to save opportunities, track applications, and get personalized recommendations.</p>
+        <div class="gate-actions">
+            <a href="/register" class="btn btn-primary">Sign up free</a>
+            <a href="/login" class="btn btn-secondary">Log in</a>
+        </div>
+    </div>
+{% endif %}
 
 <div class="filter-bar">
     <form method="GET" class="search-form">
         <input type="text" name="search" value="{{ search }}" placeholder="Search opportunities...">
         <select name="category" onchange="this.form.submit()">
-            <option value="">All Categories</option>
+            <option value="">All categories</option>
             {% for cat in categories %}
                 <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
             {% endfor %}
         </select>
-        <button type="submit" class="btn-sm">Search</button>
+        <button type="submit" class="btn btn-primary btn-sm">Search</button>
     </form>
     {% if current_user.is_authenticated %}
-        <a href="/saved" class="btn-secondary">Saved Opportunities</a>
+        <a href="/saved" class="btn btn-secondary btn-sm">Saved opportunities</a>
     {% endif %}
 </div>
 
@@ -34,8 +45,8 @@
                 <p>{{ opp.description[:120] }}{% if opp.description|length > 120 %}...{% endif %}</p>
                 <div class="card-meta">
                     {% if opp.organization %}<span>{{ opp.organization }}</span>{% endif %}
-                    <span>&#128205; {{ opp.location }}</span>
-                    {% if opp.deadline %}<span>&#128197; Deadline: {{ opp.deadline }}</span>{% endif %}
+                    <span>{{ opp.location }}</span>
+                    {% if opp.deadline %}<span>Deadline: {{ opp.deadline }}</span>{% endif %}
                 </div>
             </a>
         {% endfor %}

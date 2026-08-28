@@ -118,4 +118,30 @@ def test_teams_list(client, db):
 
 def test_create_team_requires_login(client, db):
     resp = client.get("/teams/create", follow_redirects=True)
-    assert b"Login" in resp.data or b"Welcome Back" in resp.data
+    assert b"Log in" in resp.data or b"Welcome back" in resp.data
+
+
+def test_max_team_size_enforced(client, db):
+    h_id = _setup_hackathon(client, db)
+
+    with client.application.app_context():
+        hackathon = Hackathon.query.get(h_id)
+        hackathon.max_team_size = 2
+        db.session.commit()
+
+    _register_and_login(client, username="leader1", email="l1@test.com")
+    client.post("/teams/create", data={
+        "name": "Small Team", "description": "Max 2", "hackathon_id": h_id,
+    }, follow_redirects=True)
+
+    with client.application.app_context():
+        team = Team.query.filter_by(name="Small Team").first()
+        team_id = team.id
+
+    _register_and_login(client, username="member1", email="m1@test.com")
+    resp = client.post(f"/teams/{team_id}/join", follow_redirects=True)
+    assert b"joined the team" in resp.data
+
+    _register_and_login(client, username="member2", email="m2@test.com")
+    resp = client.post(f"/teams/{team_id}/join", follow_redirects=True)
+    assert b"team is full" in resp.data

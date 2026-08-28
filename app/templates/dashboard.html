@@ -3,9 +3,21 @@
 
 {% block content %}
 <div class="dashboard-header">
-    <h1>Welcome, {{ user.username }}!</h1>
-    <p class="role-badge role-{{ user.role }}">{{ user.role.title() }}</p>
+    <h1>Welcome, {{ user.username }}</h1>
+    <span class="badge role-{{ user.role }}">{{ user.role.title() }}</span>
 </div>
+
+{% if not profile_complete and user.role != "organizer" %}
+<div class="card" style="border-left:3px solid var(--color-primary)">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+        <div>
+            <h3 style="margin-bottom:4px">Complete your profile</h3>
+            <p style="font-size:0.875rem;color:var(--color-text-secondary)">Add your skills, bio, and experience to get discovered by other builders. ({{ profile_percent }}% complete)</p>
+        </div>
+        <a href="/profile/edit" class="btn btn-primary btn-sm">Edit profile</a>
+    </div>
+</div>
+{% endif %}
 
 <div class="stats-grid">
     <div class="stat-card">
@@ -23,38 +35,82 @@
 </div>
 
 <div class="dashboard-actions">
-    <h2>Quick Actions</h2>
+    <h2>Quick actions</h2>
     <div class="action-buttons">
         {% if user.role == "organizer" %}
-            <a href="/hackathons/create" class="btn-primary">Create Hackathon</a>
+            <a href="/hackathons/create" class="btn btn-primary">Create hackathon</a>
         {% endif %}
-        <a href="/hackathons" class="btn-secondary">Browse Hackathons</a>
-        <a href="/projects/submit" class="btn-secondary">Submit Project</a>
-        <a href="/profile/edit" class="btn-secondary">Edit Profile</a>
-        <a href="/opportunities" class="btn-secondary">Opportunities</a>
+        <a href="/hackathons" class="btn btn-secondary">Browse hackathons</a>
+        {% if user.role != "organizer" %}
+            <a href="/teams" class="btn btn-secondary">My teams</a>
+            <a href="/projects/submit" class="btn btn-secondary">Submit project</a>
+        {% endif %}
+        <a href="/builders" class="btn btn-secondary">Find builders</a>
+        <a href="/opportunities" class="btn btn-secondary">Opportunities</a>
+        <a href="/profile/{{ user.id }}" class="btn btn-secondary">View profile</a>
     </div>
 </div>
 
+{% if my_teams %}
 <div class="card">
-    <h2>Your Hackathons</h2>
+    <h2>Your teams</h2>
+    <div class="teams-grid">
+        {% for team in my_teams %}
+            <a href="/teams/{{ team.id }}" class="team-card">
+                <h3>{{ team.name }}</h3>
+                <p>{{ team.description[:100] }}{% if team.description|length > 100 %}...{% endif %}</p>
+                <div class="card-meta">
+                    <span>{{ team.member_count }} members</span>
+                    <span>{{ team.hackathon.title }}</span>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% if submissions %}
+<div class="card">
+    <h2>Your projects</h2>
+    <div class="projects-grid">
+        {% for sub in submissions %}
+            <a href="/projects/{{ sub.id }}" class="project-card">
+                <h3>{{ sub.title }}</h3>
+                <p>{{ sub.description[:100] }}{% if sub.description|length > 100 %}...{% endif %}</p>
+                <div class="card-meta">
+                    <span>{{ sub.hackathon.title }}</span>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<div class="card">
+    <h2>Your hackathons</h2>
     {% if hackathons %}
         <div class="hackathon-grid">
         {% for hackathon in hackathons %}
             <a href="/hackathons/{{ hackathon.id }}" class="hackathon-card">
-                <h3>{{ hackathon.title }}</h3>
-                <span class="status-badge status-{{ hackathon.status }}">{{ hackathon.status_display }}</span>
+                <div class="card-header">
+                    <h3>{{ hackathon.title }}</h3>
+                    <span class="status-badge status-{{ hackathon.status }}">{{ hackathon.status_display }}</span>
+                </div>
                 <p>{{ hackathon.description[:120] }}{% if hackathon.description|length > 120 %}...{% endif %}</p>
-                <small>{{ hackathon.start_date }} &mdash; {{ hackathon.end_date }}</small>
+                <div class="card-meta">
+                    <span>{{ hackathon.start_date }} &mdash; {{ hackathon.end_date }}</span>
+                </div>
             </a>
         {% endfor %}
         </div>
     {% else %}
         <div class="empty-state">
-            <p>No hackathons yet.</p>
+            <h3>No hackathons yet</h3>
+            <p>{% if user.role == "organizer" %}Create your first hackathon to get started.{% else %}Browse available hackathons to get started.{% endif %}</p>
             {% if user.role == "organizer" %}
-                <a href="/hackathons/create" class="btn-primary">Create Your First Hackathon</a>
+                <a href="/hackathons/create" class="btn btn-primary">Create hackathon</a>
             {% else %}
-                <a href="/hackathons" class="btn-primary">Browse Hackathons</a>
+                <a href="/hackathons" class="btn btn-primary">Browse hackathons</a>
             {% endif %}
         </div>
     {% endif %}

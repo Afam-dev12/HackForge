@@ -8,32 +8,42 @@
             <h1>{{ hackathon.title }}</h1>
             <div class="detail-meta">
                 <span class="status-badge status-{{ hackathon.status }}">{{ hackathon.status_display }}</span>
-                <span>&#128205; {{ hackathon.location }}</span>
-                <span>&#128197; {{ hackathon.start_date }} &mdash; {{ hackathon.end_date }}</span>
+                <span>{{ hackathon.location }}</span>
+                <span>{{ hackathon.start_date }} &mdash; {{ hackathon.end_date }}</span>
             </div>
         </div>
         {% if current_user.is_authenticated %}
             {% if current_user.id == hackathon.created_by %}
                 <div class="detail-actions">
-                    <a href="/hackathons/{{ hackathon.id }}/edit" class="btn-secondary">Edit</a>
-                    <a href="/hackathons/{{ hackathon.id }}/participants" class="btn-secondary">Participants</a>
-                    <a href="/judging/hackathon/{{ hackathon.id }}" class="btn-secondary">Judging</a>
-                    <a href="/results/hackathon/{{ hackathon.id }}" class="btn-secondary">Results</a>
+                    <a href="/hackathons/{{ hackathon.id }}/edit" class="btn btn-secondary btn-sm">Edit</a>
+                    <a href="/hackathons/{{ hackathon.id }}/participants" class="btn btn-secondary btn-sm">Participants</a>
+                    <a href="/judging/hackathon/{{ hackathon.id }}" class="btn btn-secondary btn-sm">Judging</a>
+                    <a href="/results/hackathon/{{ hackathon.id }}" class="btn btn-secondary btn-sm">Results</a>
                 </div>
             {% elif not is_registered %}
-                <form method="POST" action="/hackathons/{{ hackathon.id }}/register">
-                    <button type="submit" class="btn-primary">Register for Hackathon</button>
-                </form>
+                {% if hackathon.status != "completed" %}
+                    <form method="POST" action="/hackathons/{{ hackathon.id }}/register">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-primary">Register for hackathon</button>
+                    </form>
+                {% else %}
+                    <span class="registered-badge" style="background:var(--color-border-light);color:var(--color-text-secondary)">Registration closed</span>
+                {% endif %}
             {% else %}
                 <div class="detail-actions">
                     <span class="registered-badge">Registered</span>
-                    <a href="/teams/create?hackathon_id={{ hackathon.id }}" class="btn-primary">Create Team</a>
-                    <a href="/teams/hackathon/{{ hackathon.id }}" class="btn-secondary">View Teams</a>
-                    <a href="/projects/submit?hackathon_id={{ hackathon.id }}" class="btn-secondary">Submit Project</a>
-                    <a href="/results/hackathon/{{ hackathon.id }}" class="btn-secondary">Results</a>
-                    <form method="POST" action="/hackathons/{{ hackathon.id }}/unregister" style="display:inline">
-                        <button type="submit" class="btn-danger-sm">Unregister</button>
-                    </form>
+                    {% if hackathon.status != "completed" %}
+                        <a href="/teams/create?hackathon_id={{ hackathon.id }}" class="btn btn-primary btn-sm">Create team</a>
+                        <a href="/projects/submit?hackathon_id={{ hackathon.id }}" class="btn btn-secondary btn-sm">Submit project</a>
+                    {% endif %}
+                    <a href="/teams/hackathon/{{ hackathon.id }}" class="btn btn-secondary btn-sm">View teams</a>
+                    <a href="/results/hackathon/{{ hackathon.id }}" class="btn btn-secondary btn-sm">Results</a>
+                    {% if hackathon.status != "completed" %}
+                        <form method="POST" action="/hackathons/{{ hackathon.id }}/unregister" style="display:inline">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-danger btn-sm">Unregister</button>
+                        </form>
+                    {% endif %}
                 </div>
             {% endif %}
         {% endif %}
@@ -42,7 +52,7 @@
     <div class="detail-body">
         <div class="detail-main">
             <div class="card">
-                <h2>About This Hackathon</h2>
+                <h2>About this hackathon</h2>
                 <p class="description-text">{{ hackathon.description }}</p>
             </div>
 
@@ -74,7 +84,7 @@
                         <span>{{ hackathon.location }}</span>
                     </div>
                     <div class="info-item">
-                        <strong>Max Team Size</strong>
+                        <strong>Max team size</strong>
                         <span>{{ hackathon.max_team_size }}</span>
                     </div>
                     <div class="info-item">

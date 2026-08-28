@@ -1,8 +1,8 @@
-from flask import Flask
+from flask import Flask, render_template
 
 from config import Config
 
-from app.extensions import db, login_manager, migrate
+from app.extensions import db, login_manager, migrate, csrf
 
 import app.login
 
@@ -26,6 +26,7 @@ def create_app(config_class=None):
     db.init_app(app)
     login_manager.init_app(app)
     migrate.init_app(app, db)
+    csrf.init_app(app)
 
     login_manager.login_view = "auth.login"
 
@@ -36,6 +37,18 @@ def create_app(config_class=None):
     app.register_blueprint(team_bp)
     app.register_blueprint(opportunity_bp)
     app.register_blueprint(judging_bp)
+
+    @app.errorhandler(404)
+    def not_found(e):
+        return render_template("404.html"), 404
+
+    @app.errorhandler(403)
+    def forbidden(e):
+        return render_template("403.html"), 403
+
+    @app.errorhandler(500)
+    def server_error(e):
+        return render_template("500.html"), 500
 
     with app.app_context():
         db.create_all()

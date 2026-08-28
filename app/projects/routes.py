@@ -39,6 +39,15 @@ def submit_project():
             flash("Title, description, and hackathon are required.", "error")
             return render_template("submit_project.html", hackathon_id=hackathon_id)
 
+        if team_id:
+            team = Team.query.get(team_id)
+            if not team or team.hackathon_id != hackathon_id:
+                flash("Invalid team for this hackathon.", "error")
+                return render_template("submit_project.html", hackathon_id=hackathon_id)
+            if not team.is_member(current_user.id):
+                flash("You are not a member of this team.", "error")
+                return render_template("submit_project.html", hackathon_id=hackathon_id)
+
         hackathon = Hackathon.query.get_or_404(hackathon_id)
 
         existing = Submission.query.filter_by(

@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="page-header">
-    <h1>Builder Network</h1>
+    <h1>Builder network</h1>
     <p>Discover talented builders, developers, and innovators.</p>
 </div>
 
@@ -11,7 +11,7 @@
     <form method="GET" class="search-form">
         <input type="text" name="search" value="{{ search }}" placeholder="Search builders...">
         <input type="text" name="skill" value="{{ skill_filter }}" placeholder="Filter by skill">
-        <button type="submit" class="btn-sm">Search</button>
+        <button type="submit" class="btn btn-primary btn-sm">Search</button>
     </form>
 </div>
 
@@ -19,10 +19,10 @@
     <div class="builders-grid">
         {% for user in users %}
             <a href="/profile/{{ user.id }}" class="builder-card">
-                <div class="builder-avatar">{{ user.username[0].upper() }}</div>
+                <div class="avatar">{{ (user.username[0] if user.username else '?').upper() }}</div>
                 <h3>{{ user.username }}</h3>
-                <span class="role-badge role-{{ user.role }}">{{ user.role.title() }}</span>
-                {% if user.location %}<p>&#128205; {{ user.location }}</p>{% endif %}
+                <span class="badge role-{{ user.role }}">{{ user.role.title() }}</span>
+                {% if user.location %}<p style="margin-top:4px">{{ user.location }}</p>{% endif %}
                 {% if user.skills_list %}
                     <div class="tech-tags">
                         {% for skill in user.skills_list[:3] %}

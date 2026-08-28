@@ -1,28 +1,33 @@
 {% extends "base.html" %}
-{% block title %}Register - HackForge{% endblock %}
+{% block title %}Sign up - HackForge{% endblock %}
 
 {% block content %}
-<div class="auth-box">
-    <div class="card">
-        <h1>Create {{ role.replace("_", " ").title() }} Account</h1>
+<div class="auth-page">
+    <div class="auth-card">
+        <h1>Create your account</h1>
+        <p class="auth-subtitle">Join the HackForge community</p>
         <form method="POST">
-            <label for="username">Username</label>
-            <input type="text" name="username" id="username" placeholder="Choose a username" required>
-
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" placeholder="you@example.com" required>
-
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" placeholder="At least 6 characters" required minlength="6">
-
-            <label for="confirm_password">Confirm Password</label>
-            <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm password" required minlength="6">
-
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" placeholder="Choose a username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" placeholder="At least 6 characters" required minlength="6">
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm password</label>
+                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm password" required minlength="6">
+            </div>
             <input type="hidden" name="role" value="{{ role }}">
-
-            <button type="submit">Create Account</button>
+            <button type="submit" class="btn btn-primary btn-block">Create account</button>
         </form>
-        <p class="auth-switch">Already have an account? <a href="/login">Login</a></p>
+        <p class="auth-switch">Already have an account? <a href="/login">Log in</a></p>
         <div class="role-toggle">
             <a href="/register/participant" class="{% if role == 'participant' %}active{% endif %}">Participant</a>
             <a href="/register/organizer" class="{% if role == 'organizer' %}active{% endif %}">Organizer</a>

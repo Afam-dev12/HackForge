@@ -1,63 +1,171 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="hero">
-    <h1>Where Young Builders <span class="highlight">Discover</span>, <span class="highlight">Connect</span>, <span class="highlight">Build</span>, <span class="highlight">Launch</span> &amp; <span class="highlight">Grow</span></h1>
-    <p>HackForge brings together developers, designers, and innovators. Find hackathons, form teams, build projects, and discover opportunities &mdash; all in one platform.</p>
-    <div class="hero-buttons">
-        <a href="/register/organizer" class="btn-primary">Create as Organizer</a>
-        <a href="/register/participant" class="btn-secondary">Join as Builder</a>
+<section class="hf-hero">
+    <div class="hf-hero-content">
+        <p class="hf-hero-eyebrow">Built for builders</p>
+        <h1 class="hf-hero-title">Find your people.<br>Build something real.</h1>
+        <p class="hf-hero-subtitle">HackForge connects developers, designers, and innovators with hackathons, teams, projects, and opportunities. One platform to move from idea to shipped product.</p>
+        <div class="hf-hero-actions">
+            <a href="/register" class="btn btn-primary btn-lg">Get started free</a>
+            <a href="/hackathons" class="btn btn-secondary btn-lg">Explore hackathons</a>
+        </div>
+    </div>
+    <div class="hf-hero-composition">
+        <div class="hf-comp-window">
+            <div class="hf-comp-bar">
+                <span class="hf-comp-dot"></span>
+                <span class="hf-comp-dot"></span>
+                <span class="hf-comp-dot"></span>
+                <span class="hf-comp-url">hackforge.io/hackathons</span>
+            </div>
+            <div class="hf-comp-body">
+                <div class="hf-comp-search">
+                    <span class="hf-comp-search-icon">&#9906;</span>
+                    <span class="hf-comp-search-text">Search hackathons...</span>
+                </div>
+                <div class="hf-comp-cards">
+                    <div class="hf-comp-card">
+                        <div class="hf-comp-card-top">
+                            <span class="hf-comp-card-badge">Active</span>
+                            <span class="hf-comp-card-date">Mar 15 &mdash; Apr 2</span>
+                        </div>
+                        <div class="hf-comp-card-title">Africa Climate Tech Hack</div>
+                        <div class="hf-comp-card-meta">Online &middot; 234 registered</div>
+                    </div>
+                    <div class="hf-comp-card">
+                        <div class="hf-comp-card-top">
+                            <span class="hf-comp-card-badge">Active</span>
+                            <span class="hf-comp-card-date">Mar 20 &mdash; Apr 10</span>
+                        </div>
+                        <div class="hf-comp-card-title">Fintech Innovation Sprint</div>
+                        <div class="hf-comp-card-meta">Lagos, NG &middot; 189 registered</div>
+                    </div>
+                    <div class="hf-comp-card">
+                        <div class="hf-comp-card-top">
+                            <span class="hf-comp-card-badge hf-comp-card-badge--upcoming">Upcoming</span>
+                            <span class="hf-comp-card-date">Apr 5 &mdash; Apr 20</span>
+                        </div>
+                        <div class="hf-comp-card-title">Health Data Challenge</div>
+                        <div class="hf-comp-card-meta">Nairobi, KE &middot; 156 registered</div>
+                    </div>
+                </div>
+                <div class="hf-comp-avatars">
+                    <div class="hf-comp-avatar" style="background:#2563eb">A</div>
+                    <div class="hf-comp-avatar" style="background:#059669">K</div>
+                    <div class="hf-comp-avatar" style="background:#d97706">M</div>
+                    <div class="hf-comp-avatar" style="background:#7c3aed">T</div>
+                    <div class="hf-comp-avatar" style="background:#dc2626">J</div>
+                    <span class="hf-comp-avatar-more">+48 builders</span>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
-<section class="features-section">
-    <div class="features-grid">
-        <div class="feature-card">
-            <div class="feature-icon">&#128269;</div>
-            <h3>Discover</h3>
-            <p>Find hackathons, scholarships, internships, and opportunities tailored for young African builders and global innovators.</p>
+<section class="hf-enable">
+    <div class="hf-enable-header">
+        <h2>Everything you need to build</h2>
+        <p>HackForge brings the entire builder journey into one place. From finding the right hackathon to showcasing your finished project.</p>
+    </div>
+    <div class="hf-enable-grid">
+        <div class="hf-enable-item">
+            <div class="hf-enable-num">01</div>
+            <div class="hf-enable-body">
+                <h3>Discover</h3>
+                <p>Find hackathons, scholarships, and opportunities that match your skills and interests. No more searching across dozen of platforms.</p>
+            </div>
         </div>
-        <div class="feature-card">
-            <div class="feature-icon">&#129309;</div>
-            <h3>Connect</h3>
-            <p>Find teammates, collaborators, and mentors. Build with talented people who share your vision and drive.</p>
+        <div class="hf-enable-item">
+            <div class="hf-enable-num">02</div>
+            <div class="hf-enable-body">
+                <h3>Connect</h3>
+                <p>Meet builders with complementary skills. Browse profiles, find collaborators, and form teams that can actually ship.</p>
+            </div>
         </div>
-        <div class="feature-card">
-            <div class="feature-icon">&#128736;</div>
-            <h3>Build</h3>
-            <p>Create projects, form teams, and develop real solutions. Turn your ideas into prototypes and products.</p>
+        <div class="hf-enable-item">
+            <div class="hf-enable-num">03</div>
+            <div class="hf-enable-body">
+                <h3>Build</h3>
+                <p>Work with your team, track submissions, and turn ideas into working projects. From first commit to final demo.</p>
+            </div>
         </div>
-        <div class="feature-card">
-            <div class="feature-icon">&#128640;</div>
-            <h3>Launch</h3>
-            <p>Showcase your work, compete in hackathons, and present your projects to the world.</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">&#127793;</div>
-            <h3>Grow</h3>
-            <p>Get feedback, discover the next opportunity, and continue building beyond any single competition.</p>
+        <div class="hf-enable-item">
+            <div class="hf-enable-num">04</div>
+            <div class="hf-enable-body">
+                <h3>Showcase</h3>
+                <p>Present your work to judges, peers, and the wider community. Build a visible track record of what you have shipped.</p>
+            </div>
         </div>
     </div>
 </section>
 
-<section class="stats-banner">
-    <div class="stat-item">
-        <h2>Hackathons</h2>
-        <p>Compete and build real solutions</p>
-    </div>
-    <div class="stat-item">
-        <h2>Opportunities</h2>
-        <p>Scholarships, internships &amp; more</p>
-    </div>
-    <div class="stat-item">
-        <h2>Builder Network</h2>
-        <p>Find your next collaborator</p>
+<section class="hf-journey">
+    <div class="hf-journey-inner">
+        <div class="hf-journey-text">
+            <p class="hf-journey-eyebrow">The platform</p>
+            <h2>From idea to shipped project.</h2>
+            <p>Most builders have ideas. Fewer have the right teammates, the right hackathon, or the right opportunity. HackForge removes the friction between having an idea and actually building it.</p>
+            <p>You discover a hackathon. You find a team. You build a project. You get judged. You showcase your work. You find the next opportunity. All in one place.</p>
+        </div>
+        <div class="hf-journey-visual">
+            <div class="hf-flow">
+                <div class="hf-flow-step">
+                    <div class="hf-flow-icon">D</div>
+                    <span>Discover</span>
+                </div>
+                <div class="hf-flow-arrow">&rarr;</div>
+                <div class="hf-flow-step">
+                    <div class="hf-flow-icon">C</div>
+                    <span>Connect</span>
+                </div>
+                <div class="hf-flow-arrow">&rarr;</div>
+                <div class="hf-flow-step">
+                    <div class="hf-flow-icon">B</div>
+                    <span>Build</span>
+                </div>
+                <div class="hf-flow-arrow">&rarr;</div>
+                <div class="hf-flow-step">
+                    <div class="hf-flow-icon">S</div>
+                    <span>Showcase</span>
+                </div>
+                <div class="hf-flow-arrow">&rarr;</div>
+                <div class="hf-flow-step">
+                    <div class="hf-flow-icon">G</div>
+                    <span>Grow</span>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
-<section class="cta-section">
-    <h2>Ready to start building?</h2>
-    <p>Join a growing community of young innovators across Africa and beyond.</p>
-    <a href="/register/participant" class="btn-primary">Get Started Free</a>
+<section class="hf-paths">
+    <div class="hf-paths-header">
+        <h2>Two ways to start</h2>
+        <p>Whether you are looking to host a hackathon or join one, HackForge has you covered.</p>
+    </div>
+    <div class="hf-paths-grid">
+        <div class="hf-path">
+            <div class="hf-path-label">For organizers</div>
+            <h3>Create and manage hackathons</h3>
+            <p>Set up your hackathon, define criteria, manage registrations, and judge submissions. Everything you need in one dashboard.</p>
+            <a href="/register/organizer" class="btn btn-primary">Start a hackathon</a>
+        </div>
+        <div class="hf-path">
+            <div class="hf-path-label">For builders</div>
+            <h3>Find hackathons and build</h3>
+            <p>Browse active hackathons, join teams, submit projects, and showcase your work. Track your progress across competitions.</p>
+            <a href="/register/participant" class="btn btn-secondary">Join as builder</a>
+        </div>
+    </div>
+</section>
+
+<section class="hf-bottom-cta">
+    <h2>Start building today</h2>
+    <p>Join builders across Africa and beyond who are shipping real projects through hackathons.</p>
+    <div class="hf-bottom-cta-actions">
+        <a href="/register" class="btn btn-primary btn-lg">Create your account</a>
+        <a href="/hackathons" class="btn btn-ghost btn-lg">Browse hackathons &rarr;</a>
+    </div>
 </section>
 {% endblock %}

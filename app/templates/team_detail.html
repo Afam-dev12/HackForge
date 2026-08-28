@@ -7,18 +7,20 @@
         <div>
             <h1>{{ team.name }}</h1>
             <div class="detail-meta">
-                <span>&#128205; {{ team.hackathon.title }}</span>
+                <span>{{ team.hackathon.title }}</span>
             </div>
         </div>
         <div class="detail-actions">
             {% if current_user.is_authenticated and not team.is_member(current_user.id) %}
                 <form method="POST" action="/teams/{{ team.id }}/join">
-                    <button type="submit" class="btn-primary">Join Team</button>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-primary">Join team</button>
                 </form>
             {% elif current_user.is_authenticated and team.is_member(current_user.id) %}
                 {% if not team.is_leader(current_user.id) %}
                     <form method="POST" action="/teams/{{ team.id }}/leave" style="display:inline">
-                        <button type="submit" class="btn-danger-sm">Leave Team</button>
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Leave team</button>
                     </form>
                 {% endif %}
             {% endif %}
@@ -37,11 +39,11 @@
             {% for member in team.members %}
                 <div class="member-item">
                     <a href="/profile/{{ member.user.id }}">
-                        <div class="builder-avatar small">{{ member.user.username[0].upper() }}</div>
+                        <div class="avatar avatar-sm">{{ (member.user.username[0] if member.user.username else '?').upper() }}</div>
                     </a>
                     <div>
                         <a href="/profile/{{ member.user.id }}"><strong>{{ member.user.username }}</strong></a>
-                        <span class="role-badge role-{{ member.role }}">{{ member.role.title() }}</span>
+                        <span class="badge role-{{ member.role }}">{{ member.role.title() }}</span>
                     </div>
                 </div>
             {% endfor %}

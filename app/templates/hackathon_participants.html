@@ -11,17 +11,17 @@
     <div class="builders-grid">
         {% for user in participants %}
             <a href="/profile/{{ user.id }}" class="builder-card">
-                <div class="builder-avatar">{{ user.username[0].upper() }}</div>
+                <div class="avatar">{{ (user.username[0] if user.username else '?').upper() }}</div>
                 <h3>{{ user.username }}</h3>
-                <span class="role-badge role-{{ user.role }}">{{ user.role.title() }}</span>
-                {% if user.location %}<p>&#128205; {{ user.location }}</p>{% endif %}
+                <span class="badge role-{{ user.role }}">{{ user.role.title() }}</span>
+                {% if user.location %}<p style="margin-top:4px">{{ user.location }}</p>{% endif %}
             </a>
         {% endfor %}
     </div>
 {% else %}
     <div class="empty-state card">
         <h3>No participants yet</h3>
-        <p>Be the first to register!</p>
+        <p>Be the first to register.</p>
     </div>
 {% endif %}
 {% endblock %}

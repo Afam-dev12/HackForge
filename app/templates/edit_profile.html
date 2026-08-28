@@ -1,39 +1,48 @@
 {% extends "base.html" %}
-{% block title %}Edit Profile - HackForge{% endblock %}
+{% block title %}Edit profile - HackForge{% endblock %}
 
 {% block content %}
-<div class="auth-box" style="max-width:600px">
-    <div class="card">
-        <h1>Edit Profile</h1>
+<div class="auth-page">
+    <div class="auth-card" style="max-width:540px">
+        <h1>Edit profile</h1>
+        <p class="auth-subtitle">Update your public profile</p>
         <form method="POST">
-            <label for="bio">Bio</label>
-            <textarea name="bio" id="bio" placeholder="Tell others about yourself">{{ current_user.bio }}</textarea>
-
-            <label for="skills">Skills (comma-separated)</label>
-            <input type="text" name="skills" id="skills" value="{{ current_user.skills }}" placeholder="Python, React, UI Design">
-
-            <label for="interests">Interests (comma-separated)</label>
-            <input type="text" name="interests" id="interests" value="{{ current_user.interests }}" placeholder="AI, Blockchain, Climate Tech">
-
-            <label for="experience_level">Experience Level</label>
-            <select name="experience_level" id="experience_level">
-                <option value="" {% if not current_user.experience_level %}selected{% endif %}>Select level</option>
-                <option value="Beginner" {% if current_user.experience_level == 'Beginner' %}selected{% endif %}>Beginner</option>
-                <option value="Intermediate" {% if current_user.experience_level == 'Intermediate' %}selected{% endif %}>Intermediate</option>
-                <option value="Advanced" {% if current_user.experience_level == 'Advanced' %}selected{% endif %}>Advanced</option>
-                <option value="Expert" {% if current_user.experience_level == 'Expert' %}selected{% endif %}>Expert</option>
-            </select>
-
-            <label for="location">Location</label>
-            <input type="text" name="location" id="location" value="{{ current_user.location }}" placeholder="Lagos, Nigeria">
-
-            <label for="github_url">GitHub URL</label>
-            <input type="url" name="github_url" id="github_url" value="{{ current_user.github_url }}" placeholder="https://github.com/username">
-
-            <label for="portfolio_url">Portfolio URL</label>
-            <input type="url" name="portfolio_url" id="portfolio_url" value="{{ current_user.portfolio_url }}" placeholder="https://yourportfolio.com">
-
-            <button type="submit">Save Profile</button>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea name="bio" id="bio" placeholder="Tell others about yourself">{{ current_user.bio }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="skills">Skills (comma-separated)</label>
+                <input type="text" name="skills" id="skills" value="{{ current_user.skills }}" placeholder="Python, React, UI Design">
+            </div>
+            <div class="form-group">
+                <label for="interests">Interests (comma-separated)</label>
+                <input type="text" name="interests" id="interests" value="{{ current_user.interests }}" placeholder="AI, Blockchain, Climate Tech">
+            </div>
+            <div class="form-group">
+                <label for="experience_level">Experience level</label>
+                <select name="experience_level" id="experience_level">
+                    <option value="" {% if not current_user.experience_level %}selected{% endif %}>Select level</option>
+                    <option value="Beginner" {% if current_user.experience_level == 'Beginner' %}selected{% endif %}>Beginner</option>
+                    <option value="Intermediate" {% if current_user.experience_level == 'Intermediate' %}selected{% endif %}>Intermediate</option>
+                    <option value="Advanced" {% if current_user.experience_level == 'Advanced' %}selected{% endif %}>Advanced</option>
+                    <option value="Expert" {% if current_user.experience_level == 'Expert' %}selected{% endif %}>Expert</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" name="location" id="location" value="{{ current_user.location }}" placeholder="Lagos, Nigeria">
+            </div>
+            <div class="form-group">
+                <label for="github_url">GitHub URL</label>
+                <input type="url" name="github_url" id="github_url" value="{{ current_user.github_url }}" placeholder="https://github.com/username">
+            </div>
+            <div class="form-group">
+                <label for="portfolio_url">Portfolio URL</label>
+                <input type="url" name="portfolio_url" id="portfolio_url" value="{{ current_user.portfolio_url }}" placeholder="https://yourportfolio.com">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Save profile</button>
         </form>
     </div>
 </div>

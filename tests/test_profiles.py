@@ -43,7 +43,7 @@ def test_profile_edit(client, db):
 
 def test_profile_edit_requires_login(client, db):
     resp = client.get("/profile/edit", follow_redirects=True)
-    assert b"Login" in resp.data or b"Welcome Back" in resp.data
+    assert b"Log in" in resp.data or b"Welcome back" in resp.data
 
 
 def test_builders_page(client, db):

@@ -34,7 +34,7 @@ def _create_opportunity(client, db, **kwargs):
 def test_opportunities_list(client, db):
     resp = client.get("/opportunities")
     assert resp.status_code == 200
-    assert b"Opportunity Hub" in resp.data
+    assert b"Opportunity hub" in resp.data
 
 
 def test_opportunity_detail(client, db):
@@ -90,7 +90,7 @@ def test_saved_opportunities_page(client, db):
 def test_save_requires_login(client, db):
     opp_id = _create_opportunity(client, db)
     resp = client.post(f"/opportunities/{opp_id}/save", follow_redirects=True)
-    assert b"Login" in resp.data or b"Welcome Back" in resp.data
+    assert b"Log in" in resp.data or b"Welcome back" in resp.data
 
 
 def test_opportunity_categories(client, db):
