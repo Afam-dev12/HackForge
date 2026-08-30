@@ -39,8 +39,26 @@
     </div>
 {% else %}
     <div class="empty-state card">
-        <h3>No hackathons found</h3>
-        <p>Check back later or adjust your search.</p>
+        {% if search or status_filter %}
+            <h3>No hackathons match your search</h3>
+            <p>Try different keywords or clear the filters.</p>
+        {% else %}
+            <h3>No hackathons yet</h3>
+            <p>{% if current_user.is_organizer %}You're the organizer — publish the first one.{%
+                elif current_user.is_authenticated %}Hackathons are being added. In the meantime, meet builders and explore opportunities.{%
+                else %}New hackathons launch all the time — sign up and we'll save your spot in the community.{% endif %}</p>
+            <div class="empty-state-actions">
+                {% if current_user.is_organizer %}
+                    <a href="/hackathons/create" class="btn btn-primary">Create your first hackathon</a>
+                {% elif current_user.is_authenticated %}
+                    <a href="/builders" class="btn btn-secondary">Meet builders</a>
+                    <a href="/opportunities" class="btn btn-secondary">Browse opportunities</a>
+                {% else %}
+                    <a href="/register" class="btn btn-primary">Get started</a>
+                    <a href="/opportunities" class="btn btn-secondary">Browse opportunities</a>
+                {% endif %}
+            </div>
+        {% endif %}
     </div>
 {% endif %}
 {% endblock %}

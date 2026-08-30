@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Create opportunity - HackForge{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-card" style="max-width:540px">
+        <h1>Create opportunity</h1>
+        <p class="auth-subtitle">Post a new scholarship, internship, or opportunity for the community</p>
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" name="title" id="title" placeholder="Opportunity title" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea name="description" id="description" placeholder="Describe the opportunity" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select name="category" id="category" required>
+                    {% for cat in ["Hackathons", "Scholarships", "Internships", "Fellowships", "Competitions", "Volunteering", "Free Courses", "Grants", "Events"] %}
+                        <option value="{{ cat }}">{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="organization">Organization</label>
+                <input type="text" name="organization" id="organization" placeholder="Organization name">
+            </div>
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" name="location" id="location" value="Online" placeholder="Online or physical location">
+            </div>
+            <div class="form-group">
+                <label for="deadline">Deadline</label>
+                <input type="date" name="deadline" id="deadline">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Create opportunity</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

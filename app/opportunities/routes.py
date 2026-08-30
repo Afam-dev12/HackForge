@@ -82,3 +82,38 @@ def saved_opportunities():
         search="",
         page_title="Saved Opportunities",
     )
+
+
+@opportunity_bp.route("/create", methods=["GET", "POST"])
+@login_required
+def create_opportunity():
+    if not current_user.is_organizer:
+        flash("Only organizers can create opportunities.", "error")
+        return redirect(url_for("opportunities.opportunities_list"))
+
+    if request.method == "POST":
+        title = request.form.get("title", "").strip()
+        description = request.form.get("description", "").strip()
+        category = request.form.get("category", "")
+        organization = request.form.get("organization", "").strip()
+        location = request.form.get("location", "Online").strip()
+        deadline = request.form.get("deadline", "").strip()
+
+        if not title or not description or not category:
+            flash("Title, description, and category are required.", "error")
+            return render_template("create_opportunity.html")
+
+        opportunity = Opportunity(
+            title=title,
+            description=description,
+            category=category,
+            organization=organization,
+            location=location,
+            deadline=deadline,
+        )
+        db.session.add(opportunity)
+        db.session.commit()
+        flash("Opportunity created!", "success")
+        return redirect(url_for("opportunities.opportunities_list"))
+
+    return render_template("create_opportunity.html")

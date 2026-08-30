@@ -110,6 +110,10 @@ def create_hackathon():
             flash("Title and description are required.", "error")
             return render_template("create_hackathon.html")
 
+        if start_date and end_date and end_date < start_date:
+            flash("End date cannot be before the start date.", "error")
+            return render_template("create_hackathon.html")
+
         hackathon = Hackathon(
             title=title,
             description=description,
@@ -149,8 +153,11 @@ def edit_hackathon(hackathon_id):
         hackathon.max_team_size = request.form.get("max_team_size", hackathon.max_team_size, type=int)
         hackathon.location = request.form.get("location", hackathon.location).strip()
         hackathon.status = request.form.get("status", hackathon.status)
-        hackathon.start_date = request.form.get("start_date", "")
-        hackathon.end_date = request.form.get("end_date", "")
+        hackathon.start_date = request.form.get("start_date", "").strip()
+        hackathon.end_date = request.form.get("end_date", "").strip()
+        if hackathon.start_date and hackathon.end_date and hackathon.end_date < hackathon.start_date:
+            flash("End date cannot be before the start date.", "error")
+            return render_template("edit_hackathon.html", hackathon=hackathon)
         db.session.commit()
 
         flash("Hackathon updated!", "success")

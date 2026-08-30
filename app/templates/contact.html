@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Contact - HackForge{% endblock %}
+{% block content %}
+<div class="page-header">
+    <a href="/" class="back-link">&larr; Back to homepage</a>
+    <h1>Contact us</h1>
+</div>
+
+<div class="card">
+    <h2>Get in touch</h2>
+    <p class="description-text">We'd love to hear from builders and organizers. Whether you found a bug, have a feature idea, or want to partner with us.</p>
+    <ul class="auth-list">
+        <li>Email: <a href="mailto:{{ contact_email }}">{{ contact_email }}</a></li>
+    </ul>
+</div>
+{% endblock %}

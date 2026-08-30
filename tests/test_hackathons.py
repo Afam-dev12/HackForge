@@ -178,3 +178,73 @@ def test_filter_by_status(client, db):
     resp = client.get("/hackathons?status=active")
     assert b"Active One" in resp.data
     assert b"Draft One" not in resp.data
+
+
+def test_cannot_create_hackathon_ending_before_start(client, db):
+    _register_and_login(client, username="dateorg", email="dateorg@test.com", role="organizer")
+    resp = client.post("/hackathons/create", data={
+        "title": "Bad Dates",
+        "description": "End before start",
+        "status": "draft", "location": "Online", "max_team_size": 5,
+        "start_date": "2026-05-10", "end_date": "2026-05-01",
+    }, follow_redirects=True)
+    assert b"End date cannot be before the start date" in resp.data
+    with client.application.app_context():
+        assert Hackathon.query.filter_by(title="Bad Dates").first() is None
+
+
+def test_cannot_edit_hackathon_ending_before_start(client, db):
+    _register_and_login(client, username="editorg", email="editorg@test.com", role="organizer")
+    client.post("/hackathons/create", data={
+        "title": "Edit Dates", "description": "Desc", "status": "draft",
+        "location": "Online", "max_team_size": 5,
+        "start_date": "2026-05-10", "end_date": "2026-05-20",
+    }, follow_redirects=True)
+
+    with client.application.app_context():
+        h = Hackathon.query.filter_by(title="Edit Dates").first()
+        assert h is not None, "Hackathon was not created"
+        h_id = h.id
+
+    resp = client.post(f"/hackathons/{h_id}/edit", data={
+        "title": "Edit Dates", "description": "Desc", "status": "active",
+        "location": "Online", "max_team_size": 5,
+        "start_date": "2026-05-10", "end_date": "2026-05-09",
+    }, follow_redirects=True)
+    assert b"End date cannot be before the start date" in resp.data
+
+    with client.application.app_context():
+        h = db.session.get(Hackathon, h_id)
+        assert h.end_date == "2026-05-20", "Invalid end date must not persist"
+
+
+def test_static_pages_about_contact_privacy(client, db):
+    for path in ("/about", "/contact", "/privacy"):
+        resp = client.get(path)
+        assert resp.status_code == 200
+    assert b"support@hackforge.io" in client.get("/contact").data
+
+
+def test_footer_company_links_resolve(client, db):
+    resp = client.get("/")
+    assert b'href="/about"' in resp.data
+    assert b'href="/contact"' in resp.data
+    assert b'href="/privacy"' in resp.data
+
+
+def test_empty_hackathons_state_anonymous(client, db):
+    resp = client.get("/hackathons")
+    assert b"No hackathons yet" in resp.data
+    assert b"Get started" in resp.data
+
+
+def test_empty_hackathons_state_organizer(client, db):
+    _register_and_login(client, username="emptorg", email="empty@test.com", role="organizer")
+    resp = client.get("/hackathons")
+    assert b"Create your first hackathon" in resp.data
+
+
+def test_empty_hackathons_state_filtered(client, db):
+    resp = client.get("/hackathons?search=nothingmatches")
+    assert b"No hackathons match your search" in resp.data
+    assert b"No hackathons yet" not in resp.data

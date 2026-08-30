@@ -13,6 +13,7 @@ from app.projects import project_bp
 from app.teams import team_bp
 from app.opportunities import opportunity_bp
 from app.judging import judging_bp
+from app.pages import pages_bp
 
 
 def create_app(config_class=None):
@@ -37,6 +38,7 @@ def create_app(config_class=None):
     app.register_blueprint(team_bp)
     app.register_blueprint(opportunity_bp)
     app.register_blueprint(judging_bp)
+    app.register_blueprint(pages_bp)
 
     @app.errorhandler(404)
     def not_found(e):

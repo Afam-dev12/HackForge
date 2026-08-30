@@ -338,6 +338,7 @@ main {
   border: 1px solid var(--color-border-light);
   border-radius: var(--radius-sm);
   margin-bottom: 14px;
+  text-decoration: none;
 }
 
 .hf-comp-search-icon {
@@ -980,6 +981,7 @@ button[type="submit"], input[type="submit"] { margin-top: 8px; }
 .empty-state { text-align: center; padding: 48px 24px; }
 .empty-state h3 { font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 6px; }
 .empty-state p { color: var(--color-text-secondary); font-size: 0.875rem; margin-bottom: 20px; }
+.empty-state-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 
 /* ===================================================
    AUTH GATE

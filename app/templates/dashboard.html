@@ -39,6 +39,7 @@
     <div class="action-buttons">
         {% if user.role == "organizer" %}
             <a href="/hackathons/create" class="btn btn-primary">Create hackathon</a>
+            <a href="/opportunities/create" class="btn btn-outline">Create opportunity</a>
         {% endif %}
         <a href="/hackathons" class="btn btn-secondary">Browse hackathons</a>
         {% if user.role != "organizer" %}
@@ -106,11 +107,12 @@
     {% else %}
         <div class="empty-state">
             <h3>No hackathons yet</h3>
-            <p>{% if user.role == "organizer" %}Create your first hackathon to get started.{% else %}Browse available hackathons to get started.{% endif %}</p>
+            <p>{% if user.role == "organizer" %}Create your first hackathon to get started.{% else %}New hackathons are being added. While you wait, meet builders and explore opportunities.{% endif %}</p>
             {% if user.role == "organizer" %}
                 <a href="/hackathons/create" class="btn btn-primary">Create hackathon</a>
             {% else %}
-                <a href="/hackathons" class="btn btn-primary">Browse hackathons</a>
+                <a href="/builders" class="btn btn-secondary">Meet builders</a>
+                <a href="/opportunities" class="btn btn-secondary">Explore opportunities</a>
             {% endif %}
         </div>
     {% endif %}
