@@ -39,7 +39,7 @@
     <div class="action-buttons">
         {% if user.role == "organizer" %}
             <a href="/hackathons/create" class="btn btn-primary">Create hackathon</a>
-            <a href="/opportunities/create" class="btn btn-outline">Create opportunity</a>
+            <a href="/create" class="btn btn-outline">Create opportunity</a>
         {% endif %}
         <a href="/hackathons" class="btn btn-secondary">Browse hackathons</a>
         {% if user.role != "organizer" %}
